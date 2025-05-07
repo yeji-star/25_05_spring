@@ -44,7 +44,7 @@ public class UserArticleController {
 	@ResponseBody
 	public List<Article> getArticles() {
 
-		return articleService.articles;
+		return articleService.getArticles();
 	}
 
 	// 단일 글만 보고 싶을 때

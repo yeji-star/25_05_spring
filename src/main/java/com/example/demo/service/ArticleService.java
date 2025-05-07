@@ -3,22 +3,24 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DemoApplication;
 import com.example.demo.dto.Article;
+import com.example.demo.repository.ArticleRepository;
 
 @Service
 public class ArticleService {
-	
-	int lastArticleId;
-	public List<Article> articles; // DB연결을 안해놔서 List 임 (새로고침시 사라짐)
+
+	@Autowired
+	private ArticleRepository articleRepository;
+
 //	private DemoApplication demoApplication;
 
 	// 생성자
-	public ArticleService() {
-		articles = new ArrayList<>();
-		lastArticleId = 0;
+	public ArticleService(ArticleRepository articleRepository) {
+		this.articleRepository = articleRepository;
 
 		makeTestData();
 
@@ -32,42 +34,34 @@ public class ArticleService {
 			String title = "제목 " + i;
 			String body = "내용 " + i;
 
-			writeArticle(title, body);
+			articleRepository.writeArticle(title, body);
 		}
 
 	}
 
 	public Article writeArticle(String title, String body) {
-		int id = lastArticleId + 1;
-		Article article = new Article(id, title, body);
-		articles.add(article);
 
-		lastArticleId++;
+		return articleRepository.writeArticle(title, body);
 
-		return article;
+	}
+
+	public void deleteArticle(int id) {
+		articleRepository.deleteArticle(id);
+
+	}
+
+	public void modifyArticle(int id, String title, String body) {
+		articleRepository.modifyArticle(id, title, body);
 
 	}
 
 	// 번호찾기
 	public Article getArticleById(int id) {
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				return article;
-			}
-		}
-		return null;
+		return articleRepository.getArticleById(id);
 	}
 
-	public void modifyArticle(int id, String title, String body) {
-		Article article = getArticleById(id);
-		article.setTitle(title);
-		article.setBody(body);
-		
+	public List<Article> getArticles() {
+		return articleRepository.getArticles();
 	}
 
-	public void deleteArticle(int id) {
-		Article article = getArticleById(id);
-		articles.remove(article);
-		
-	}
 }
