@@ -121,7 +121,7 @@ public class UserArticleController {
 		article.setTitle(title);
 		article.setBody(body);
 
-		return id + "번 글이 수정되었습니다.";
+		return id + "번 글이 수정되었습니다. " + article;
 	}
 
 }
