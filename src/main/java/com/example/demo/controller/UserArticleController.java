@@ -88,6 +88,22 @@ public class UserArticleController {
 		}
 		return null;
 	}
+	
+	// 단일 글만 보고 싶을 때
+	
+	@RequestMapping("/user/article/getArticle")
+	@ResponseBody
+	public Object getArticle(int id) {
+
+		Article article = getArticleById(id);
+		
+		if(article == null) {
+			return id + "번 글은 없습니다.";
+		}
+
+
+		return article;
+	}
 
 	// 데이터 삭제
 	
@@ -110,7 +126,7 @@ public class UserArticleController {
 
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body) {
+	public Object doModify(int id, String title, String body) {
 
 		Article article = getArticleById(id);
 		
@@ -121,7 +137,7 @@ public class UserArticleController {
 		article.setTitle(title);
 		article.setBody(body);
 
-		return id + "번 글이 수정되었습니다. " + article;
+		return article;
 	}
 
 }
