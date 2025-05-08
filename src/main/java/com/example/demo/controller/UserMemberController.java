@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.DemoApplication;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.MemberService;
+import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Member;
 
@@ -22,19 +23,26 @@ import lombok.NoArgsConstructor;
 @Controller
 public class UserMemberController {
 
-    private final DemoApplication demoApplication;
-
 	@Autowired
 	private MemberService memberService;
 
-    UserMemberController(DemoApplication demoApplication) {
-        this.demoApplication = demoApplication;
-    }
 
 	// 액션 메서드
 	@RequestMapping("/user/member/doJoin")
 	@ResponseBody
 	public Object doJoin(String loginId, String loginPw, String name) {
+		
+		if(Ut.isEmptyOrNull(loginId)) {
+			return "아이디를 입력해주세요.";
+		}
+		
+		if(Ut.isEmptyOrNull(loginPw)) {
+			return "비밀번호를 입력해주세요.";
+		}
+		
+		if(Ut.isEmptyOrNull(name)) {
+			return "이름을 입력해주세요.";
+		}
 
 		int id = memberService.joinMember(loginId, loginPw, name);
 		
