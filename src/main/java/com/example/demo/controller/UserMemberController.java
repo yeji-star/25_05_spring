@@ -30,7 +30,7 @@ public class UserMemberController {
 	// 액션 메서드
 	@RequestMapping("/user/member/doJoin")
 	@ResponseBody
-	public Object doJoin(String loginId, String loginPw, String name) {
+	public Object doJoin(String loginId, String loginPw, String name, String email) {
 		
 		if(Ut.isEmptyOrNull(loginId)) {
 			return "아이디를 입력해주세요.";
@@ -43,11 +43,20 @@ public class UserMemberController {
 		if(Ut.isEmptyOrNull(name)) {
 			return "이름을 입력해주세요.";
 		}
+		
+		if(Ut.isEmptyOrNull(email)) {
+			return "이름을 입력해주세요.";
+		}
+		
 
-		int id = memberService.joinMember(loginId, loginPw, name);
+		int id = memberService.joinMember(loginId, loginPw, name, email);
 		
 		if(id == -1) {
 			return "이미 사용중인 아이디입니다.";
+		}
+		
+		if(id == -2) {
+			return "이미 이름과 이메일입니다.";
 		}
 		
 		Member member = memberService.getMemberById(id);

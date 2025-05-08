@@ -13,7 +13,7 @@ import com.example.demo.vo.Member;
 public interface MemberRepository {
 
 	
-	public int joinMember(String loginId, String loginPw, String name);
+	public int joinMember(String loginId, String loginPw, String name, String email);
 
 //	@Select("SELECT * FROM `member`")
 //	public List<Member> getMembers();
@@ -24,4 +24,8 @@ public interface MemberRepository {
 	public int getLastInsertId();
 
 	public Member getMemberByLoginId(String loginId);
+
+	public Member getMemberByName(String name);
+
+	public Member getMemberNameByEmail(String name, String email);
 }

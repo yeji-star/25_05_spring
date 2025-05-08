@@ -17,7 +17,7 @@ public class MemberService {
 
 	public MemberService(MemberRepository memberRepository) {
 		this.memberRepository = memberRepository;
-		
+
 //		makeTestData();
 	}
 
@@ -34,29 +34,41 @@ public class MemberService {
 //
 //	}
 
-	public int joinMember(String loginId, String loginPw, String name) {
-		
+	public int joinMember(String loginId, String loginPw, String name, String email) {
+
 		Member existsMember = getMemberByLoginId(loginId);
 		System.out.println("existsMember: " + existsMember);
+
 		
-		if(existsMember != null) {
+
+		if (existsMember != null) {
 			return -1;
 		}
 		
-		memberRepository.joinMember(loginId, loginPw, name);
+		existsMember = getMemberByNameAndEmail(name, email);
+		
+		if (existsMember != null) {
+			return -2;
+		}
+
+		memberRepository.joinMember(loginId, loginPw, name, email);
 		return memberRepository.getLastInsertId();
+	}
+
+	private Member getMemberByNameAndEmail(String name, String email) {
+		return memberRepository.getMemberNameByEmail(name, email);
 	}
 
 //	public List<Member> getMembers() {
 //		return memberRepository.getMembers();
 //	}
-	
+
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
 	}
 
 	public Member getMemberByLoginId(String loginId) {
-		
+
 		return memberRepository.getMemberByLoginId(loginId);
 	}
 

@@ -6,7 +6,6 @@ import java.util.Map;
 public class Ut {
 
 	public static boolean isEmptyOrNull(String str) {
-		// TODO Auto-generated method stub
 		return str == null || str.trim().length() == 0;
 	}
 	

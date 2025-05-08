@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Member {
 
-	public Member(String loginId, String loginPw, String name) {
+	public Member(String loginId, String loginPw, String name, String email) {
 		this.loginId = loginId;
 		this.loginPw = loginPw;
 		this.name = name;
+		this.email = email;
 	}
 
 	private int id;
@@ -23,6 +24,7 @@ public class Member {
 	private String loginId;
 	private String loginPw;
 	private String name;
+	private String email;
 
 //	public Article(int id, String title, String body) {
 //		this.id = id;
