@@ -18,7 +18,10 @@ CREATE TABLE `member` (
                           updateDate DATETIME NOT NULL,
                           loginId CHAR(30) NOT NULL,
                           loginPw CHAR(200) NOT NULL,
-                          `name` CHAR(100) NOT NULL
+                          `authlevel` SMALLINT(2) UNSIGNED DEFAULT 3 COMMENT '권한 레벨 (3=일반 7=관리자)',
+                          `name` CHAR(100) NOT NULL,
+                          delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (0=탈퇴 1=탈퇴 후)',
+                          delDate DATETIME COMMENT '탈퇴 날짜'
 );
 
 
@@ -48,6 +51,7 @@ SET regDate = NOW(),
 updateDate = NOW(),
 loginId = 'test1',
 loginPw = 'test1',
+`authlevel` = 7,
 `name` = '김철수';
 
 INSERT INTO `member`
@@ -55,6 +59,7 @@ SET regDate = NOW(),
 updateDate = NOW(),
 loginId = 'test2',
 loginPw = 'test2',
+`authlevel` = 7,
 `name` = '홍길동';
 
 

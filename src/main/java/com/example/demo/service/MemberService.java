@@ -35,6 +35,14 @@ public class MemberService {
 //	}
 
 	public int joinMember(String loginId, String loginPw, String name) {
+		
+		Member existsMember = getMemberByLoginId(loginId);
+		System.out.println("existsMember: " + existsMember);
+		
+		if(existsMember != null) {
+			return -1;
+		}
+		
 		memberRepository.joinMember(loginId, loginPw, name);
 		return memberRepository.getLastInsertId();
 	}
@@ -45,6 +53,11 @@ public class MemberService {
 	
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
+	}
+
+	public Member getMemberByLoginId(String loginId) {
+		
+		return memberRepository.getMemberByLoginId(loginId);
 	}
 
 }

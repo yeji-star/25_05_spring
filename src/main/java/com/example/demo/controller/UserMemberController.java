@@ -22,20 +22,42 @@ import lombok.NoArgsConstructor;
 @Controller
 public class UserMemberController {
 
+    private final DemoApplication demoApplication;
+
 	@Autowired
 	private MemberService memberService;
+
+    UserMemberController(DemoApplication demoApplication) {
+        this.demoApplication = demoApplication;
+    }
 
 	// 액션 메서드
 	@RequestMapping("/user/member/doJoin")
 	@ResponseBody
-	public Member doJoin(String loginId, String loginPw, String name) {
+	public Object doJoin(String loginId, String loginPw, String name) {
 
 		int id = memberService.joinMember(loginId, loginPw, name);
+		
+		if(id == -1) {
+			return "이미 사용중인 아이디입니다.";
+		}
 		
 		Member member = memberService.getMemberById(id);
 
 		return member;
 	}
+	
+//	@RequestMapping("/user/member/doLogin")
+//	@ResponseBody
+//	public Member dologin(String loginId, String loginPw, String name) {
+//	
+//		
+//		Member member = memberService.getMemberByLoginId(loginId);
+//
+//		return member;
+//		
+//		
+//	}
 
 //	@RequestMapping("/user/member/getMembers")
 //	@ResponseBody
