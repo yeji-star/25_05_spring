@@ -3,54 +3,37 @@ package com.example.demo.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.dto.Article;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Component;
 
-public class ArticleRepository {
-	int lastArticleId;
-	public List<Article> articles; // DB연결을 안해놔서 List 임 (새로고침시 사라짐)
+import com.example.demo.vo.Article;
+
+@Mapper
+public interface ArticleRepository {
 	
-	public ArticleRepository() {
-		articles = new ArrayList<>();
-		lastArticleId = 0;
-	}
+	// INSERT INTO article SET regDate = NOW(), updateDate = NOW(), title = ?, `body` = ?
 
-	public Article writeArticle(String title, String body) {
-		int id = lastArticleId + 1;
-		Article article = new Article(id, title, body);
-		articles.add(article);
+//	@Insert("INSERT INTO article SET regDate = NOW(), updateDate = NOW(), title = #{title}, `body` = #{body}")
+	public int writeArticle(String title, String body);
 
-		lastArticleId++;
+	// DELETE FROM article WHERE id = ?
+//	@Delete("DELETE FROM article WHERE id = #{id}")
+	public void deleteArticle(int id);
 
-		return article;
-		
-	}
+	//UPDATE article SET updateDate = NOW(), title = ?, `body` = ? WHERE id = ?
+//	@Update("UPDATE article SET updateDate = NOW(), title = #{title}, `body` = #{body} WHERE id = #{id}")
+	public void modifyArticle(int id, String title, String body);
 
-	public void deleteArticle(int id) {
-		Article article = getArticleById(id);
-		articles.remove(article);
-		
-	}
+	//SELECT * FROM article WHERE id = ?
+//	@Select("SELECT * FROM article WHERE id = #{id}")
+	public Article getArticleById(int id);
 
-	public void modifyArticle(int id, String title, String body) {
-		Article article = getArticleById(id);
-		article.setTitle(title);
-		article.setBody(body);
-		
-	}
+	//SELECT * FROM article ORDER BY id DESC
+//	@Select("SELECT * FROM article ORDER BY id DESC")
+	public List<Article> getArticles();
 
-	public Article getArticleById(int id) {
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				return article;
-			}
-		}
-		return null;
-	}
-
-	public List<Article> getArticles() {
-		return articles;
-		
-	}
-	
-	
 }

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.DemoApplication;
-import com.example.demo.dto.Article;
 import com.example.demo.service.ArticleService;
+import com.example.demo.vo.Article;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,12 +20,8 @@ import lombok.NoArgsConstructor;
 @Controller
 public class UserArticleController {
 
-//	private final DemoApplication demoApplication;
-
 	@Autowired
 	private ArticleService articleService;
-
-	/////////////////////
 
 	// id, title, body로 이루어진 게시글 객체 1개 생성
 	// 액션 메서드
@@ -85,15 +81,17 @@ public class UserArticleController {
 	@ResponseBody
 	public Object doModify(int id, String title, String body) {
 
+		System.out.println("id" + id);
+		System.out.println("title " + title);
+		System.out.println("body " + body);
+
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
 			return id + "번 글은 없습니다.";
 		}
-		
+
 		articleService.modifyArticle(id, title, body);
-
-
 
 		return article;
 	}
