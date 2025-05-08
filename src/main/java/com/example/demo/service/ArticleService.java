@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.DemoApplication;
 import com.example.demo.repository.ArticleRepository;
+import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.ResultData;
 
 @Service
 public class ArticleService {
@@ -24,10 +27,12 @@ public class ArticleService {
 	}
 
 
-	public Article writeArticle(String title, String body) {
+	public ResultData writeArticle(String title, String body) {
 
 		articleRepository.writeArticle(title, body);
-		return new Article(title, body);
+		int id =  articleRepository.getLastInsertId();
+		
+		return ResultData.from("S-1", Ut.f("%d번 글이 등록되었습니다", id), id);
 
 	}
 

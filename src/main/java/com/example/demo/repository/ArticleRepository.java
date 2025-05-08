@@ -36,4 +36,6 @@ public interface ArticleRepository {
 //	@Select("SELECT * FROM article ORDER BY id DESC")
 	public List<Article> getArticles();
 
+	public int getLastInsertId();
+
 }

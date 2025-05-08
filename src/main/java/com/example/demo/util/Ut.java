@@ -8,25 +8,30 @@ public class Ut {
 	public static boolean isEmptyOrNull(String str) {
 		return str == null || str.trim().length() == 0;
 	}
-	
+
 	public static boolean isEmpty(Object obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return true;
 		}
-		
-		if(obj instanceof String) {
-			return ((String)obj).trim().length() == 0;
+
+		if (obj instanceof String) {
+			return ((String) obj).trim().length() == 0;
 		}
-		
-		if(obj instanceof Map) {
-			return ((Map<?,?>)obj).isEmpty();
+
+		if (obj instanceof Map) {
+			return ((Map<?, ?>) obj).isEmpty();
 		}
-		
-		if(obj.getClass().isArray()) {
+
+		if (obj.getClass().isArray()) {
 			return Array.getLength(obj) == 0;
 		}
-		
+
 		return false;
+	}
+
+	public static String f(String string, Object... args) {
+
+		return String.format(string, args);
 	}
 
 }

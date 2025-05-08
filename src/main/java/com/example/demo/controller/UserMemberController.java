@@ -15,6 +15,7 @@ import com.example.demo.service.MemberService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Member;
+import com.example.demo.vo.ResultData;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,44 +27,44 @@ public class UserMemberController {
 	@Autowired
 	private MemberService memberService;
 
-
 	// 액션 메서드
 	@RequestMapping("/user/member/doJoin")
 	@ResponseBody
-	public Object doJoin(String loginId, String loginPw, String name, String email) {
+	public ResultData doJoin(String loginId, String loginPw, String name, String email) {
+
 		
-		if(Ut.isEmptyOrNull(loginId)) {
-			return "아이디를 입력해주세요.";
+		
+		if (Ut.isEmptyOrNull(loginId)) {
+			return ResultData.from("f-1", "아이디를 입력해주세요.");
 		}
-		
-		if(Ut.isEmptyOrNull(loginPw)) {
-			return "비밀번호를 입력해주세요.";
+
+		if (Ut.isEmptyOrNull(loginPw)) {
+			return ResultData.from("f-1", "비밀번호를 입력해주세요.");
 		}
-		
-		if(Ut.isEmptyOrNull(name)) {
-			return "이름을 입력해주세요.";
+
+		if (Ut.isEmptyOrNull(name)) {
+			return ResultData.from("f-1", "이름을 입력해주세요.");
 		}
-		
-		if(Ut.isEmptyOrNull(email)) {
-			return "이름을 입력해주세요.";
+
+		if (Ut.isEmptyOrNull(email)) {
+			return ResultData.from("f-1", "이메일을 입력해주세요.");
 		}
-		
 
 		int id = memberService.joinMember(loginId, loginPw, name, email);
-		
-		if(id == -1) {
-			return "이미 사용중인 아이디입니다.";
+
+		if (id == -1) {
+			return ResultData.from("f-1", Ut.f("이미 사용중인 아이디(%s)입니다.", loginId));		
 		}
-		
-		if(id == -2) {
-			return "이미 이름과 이메일입니다.";
+
+		if (id == -2) {
+			return ResultData.from("f-1", Ut.f("이미 사용중인 이름(%s)과 이메일(%s)입니다.", name, email));
 		}
-		
+
 		Member member = memberService.getMemberById(id);
 
-		return member;
+		return ResultData.from("S-1", Ut.f("%d번 유저입니다.", id), member);
 	}
-	
+
 //	@RequestMapping("/user/member/doLogin")
 //	@ResponseBody
 //	public Member dologin(String loginId, String loginPw, String name) {
