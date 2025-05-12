@@ -19,20 +19,18 @@ public class ArticleService {
 	@Autowired
 	private ArticleRepository articleRepository;
 
-
 	// 생성자
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
 
 	}
 
+	public ResultData writeArticle(int memberId, String title, String body) {
 
-	public ResultData writeArticle(String title, String body) {
+		articleRepository.writeArticle(memberId, title, body);
+		int id = articleRepository.getLastInsertId();
 
-		articleRepository.writeArticle(title, body);
-		int id =  articleRepository.getLastInsertId();
-		
-		return ResultData.from("S-1", Ut.f("%d번 글이 등록되었습니다", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 글이 등록되었습니다", id), "등록된 게시글 id", id);
 
 	}
 
@@ -46,6 +44,24 @@ public class ArticleService {
 
 	}
 
+	public ResultData userCanModify(int loginedMemberId, Article article) {
+
+		if (article.getMemberId() != loginedMemberId) {
+			return ResultData.from("F-A", Ut.f("%d번 게시글에 대한 수정 권한이 없습니다.", article.getId()));
+		}
+
+		return ResultData.from("S-1", Ut.f("%d번 게시글의 수정이 가능합니다.", article.getId()));
+	}
+	
+	public ResultData userCanDelete(int loginedMemberId, Article article) {
+
+		if (article.getMemberId() != loginedMemberId) {
+			return ResultData.from("F-A", Ut.f("%d번 게시글에 대한 삭제 권한이 없습니다.", article.getId()));
+		}
+
+		return ResultData.from("S-1", Ut.f("%d번 게시글의 삭제가 가능합니다.", article.getId()));
+	}
+
 	// 번호찾기
 	public Article getArticleById(int id) {
 		return articleRepository.getArticleById(id);
@@ -54,5 +70,34 @@ public class ArticleService {
 	public List<Article> getArticles() {
 		return articleRepository.getArticles();
 	}
+
+	public Article getForPrintArticle(int loginedMemberId, int id) {
+		Article article = articleRepository.getForPrintArticle(id);
+
+		controllForPrintData(loginedMemberId, article);
+
+		return article;
+	}
+
+	private void controllForPrintData(int loginedMemberId, Article article) {
+		if (article == null) {
+			return;
+		}
+
+		ResultData userCanModifyRd = userCanModify(loginedMemberId, article);
+
+		article.setUserCanModify(userCanModifyRd.isSuccess());
+		
+		ResultData userCanDeleteRd = userCanDelete(loginedMemberId, article);
+
+		article.setUserCanDelete(userCanDeleteRd.isSuccess());
+
+	}
+	
+
+	
+	
+
+
 
 }

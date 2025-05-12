@@ -12,13 +12,11 @@ import com.example.demo.vo.Member;
 @Mapper
 public interface MemberRepository {
 
-	
-	public int joinMember(String loginId, String loginPw, String name, String email);
+	public int joinMember(String loginId, String loginPw, String name, String nickname, String email);
 
 //	@Select("SELECT * FROM `member`")
 //	public List<Member> getMembers();
 
-	
 	public Member getMemberById(int id);
 
 	public int getLastInsertId();
