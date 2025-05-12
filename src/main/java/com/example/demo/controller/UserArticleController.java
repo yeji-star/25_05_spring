@@ -69,7 +69,7 @@ public class UserArticleController {
 	@RequestMapping("/user/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
 
-		Rq rq = new Rq(req);
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
@@ -96,13 +96,9 @@ public class UserArticleController {
 	@ResponseBody
 	public String doDelete(HttpServletRequest req, int id) {
 
-		Rq rq = new Rq(req);
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticleById(id);
-
-		if (rq.isLogined() == false) {
-			return Ut.isReplace("F-A", "로그인 후 이용하세요", "../member/login");
-		}
 
 		if (article == null) {
 			return Ut.isHistoryBack("F-1", Ut.f("%d번 글은 없습니다.", id));
@@ -121,37 +117,13 @@ public class UserArticleController {
 		return Ut.isReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
 	}
 
-	// 수정 페이지 보여주기
-
-	@RequestMapping("/user/article/modify")
-	public String showModify(HttpSession session, Model model, int id, String title, String body) {
-
-		boolean isLogined = false;
-		int loginedMemberId = 0;
-
-		if (session.getAttribute("loginedMemberId") != null) {
-			isLogined = true;
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-		}
-
-		Article article = articleService.getForPrintArticle(loginedMemberId, id);
-
-		model.addAttribute("article", article);
-
-		return "user/article/modify";
-	}
-
 	// 글 수정
 
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
 	public ResultData doModify(HttpServletRequest req, int id, String title, String body) {
 
-		Rq rq = new Rq(req);
-
-		if (rq.isLogined() == false) {
-			return ResultData.from("F-A", "로그인 하세요.");
-		}
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticleById(id);
 
@@ -176,15 +148,13 @@ public class UserArticleController {
 		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "수정된 글", article);
 	}
 
+	// 글쓰기
+
 	@RequestMapping("/user/article/doWrite")
 	@ResponseBody
 	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
 
-		Rq rq = new Rq(req);
-
-		if (rq.isLogined() == false) {
-			return ResultData.from("F-A", "로그인을 해주세요.");
-		}
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (Ut.isEmptyOrNull(title)) {
 			return ResultData.from("F-1", "제목을 입력하세요.");

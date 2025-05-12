@@ -51,6 +51,8 @@ public class UserMemberController {
 
 		return ResultData.from("S-1", Ut.f("로그아웃 되었습니다."));
 	}
+	
+	
 
 	// 액션 메서드
 	@RequestMapping("/user/member/doJoin")
@@ -98,6 +100,11 @@ public class UserMemberController {
 		Member member = memberService.getMemberById((int) doJoinRd.getData1());
 
 		return ResultData.newData(doJoinRd, "새로 생성된 member", member);
+	}
+	
+	@RequestMapping("/user/member/login")
+	public String showLogin() {
+		return "/user/member/login";
 	}
 
 	@RequestMapping("/user/member/doLogin")
