@@ -80,8 +80,12 @@ email = 'abcde@gmail.com';
 ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
 
 UPDATE article 
+SET memberId = 1
+WHERE id = 2;
+
+UPDATE article 
 SET memberId = 2
-WHERE id IN (1,2);
+WHERE id = 1;
 
 UPDATE article 
 SET memberId = 3

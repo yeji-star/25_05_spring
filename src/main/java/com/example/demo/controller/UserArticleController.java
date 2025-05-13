@@ -101,22 +101,28 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return Ut.isHistoryBack("F-1", Ut.f("%d번 글은 없습니다.", id));
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글은 없습니다.", id));
 		}
 
 		ResultData userCanDeleteRd = articleService.userCanDelete(rq.getLoginedMemberId(), article);
 
 		if (userCanDeleteRd.isfail()) {
-			return Ut.isHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
+			return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
 		}
 
 		if (userCanDeleteRd.isSuccess()) {
 			articleService.deleteArticle(id);
 		}
 
-		return Ut.isReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
+		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
 	}
 
+	// 수정 폼 보여주기
+	@RequestMapping("/user/article/modify")
+	public String showModify() {
+		return "/user/article/modify";
+	}
+	
 	// 글 수정
 
 	@RequestMapping("/user/article/doModify")
@@ -147,21 +153,27 @@ public class UserArticleController {
 
 		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "수정된 글", article);
 	}
+	
+	// 글쓰기 폼 보여주기
+	@RequestMapping("/user/article/write")
+	public String showWrite() {
+		return "/user/article/write";
+	}
 
 	// 글쓰기
 
 	@RequestMapping("/user/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (Ut.isEmptyOrNull(title)) {
-			return ResultData.from("F-1", "제목을 입력하세요.");
+			return Ut.jsHistoryBack("F-1", "제목을 입력하세요.");
 		}
 
 		if (Ut.isEmptyOrNull(body)) {
-			return ResultData.from("F-2", "내용을 입력하세요.");
+			return Ut.jsHistoryBack("F-2", "내용을 입력하세요.");
 		}
 
 		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
@@ -170,7 +182,7 @@ public class UserArticleController {
 
 		Article article = articleService.getArticleById(id);
 
-		return ResultData.newData(doWriteRd, "새로 작성된 게시글", article);
+		return Ut.jsReplace("S-1", Ut.f("%d번 글이 작성됐습니다.", article.getId()), "../article/list");
 
 	}
 }

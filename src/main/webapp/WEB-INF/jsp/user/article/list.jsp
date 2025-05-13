@@ -11,10 +11,10 @@
 
 			<thead>
 				<tr>
-					<th style="text-align: center;">ID</th>
-					<th style="text-align: center;">Registration Date</th>
-					<th style="text-align: center;">Title</th>
-					<th style="text-align: center;">Writer</th>
+					<th style="text-align: center;">아이디</th>
+					<th style="text-align: center;">글쓴 날짜</th>
+					<th style="text-align: center;">제목</th>
+					<th style="text-align: center;">글쓴이</th>
 				</tr>
 			</thead>
 			<tbody>

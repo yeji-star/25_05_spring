@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Ut {
 
-	public static String isReplace(String resultCode, String msg, String replaceUrl) {
+	public static String jsReplace(String resultCode, String msg, String replaceUrl) {
 		
 
 		
@@ -28,7 +28,7 @@ public class Ut {
 				""", resultMsg, replaceUrl);	
 		}
 	
-	public static String isHistoryBack(String resultCode, String msg) {
+	public static String jsHistoryBack(String resultCode, String msg) {
 		
 		if(resultCode == null) {
 			resultCode = "";

@@ -10,27 +10,27 @@
 		<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<tbody>
 				<tr>
-					<th style="text-align: center;">ID</th>
+					<th style="text-align: center;">아이디</th>
 					<td style="text-align: center;">${article.id}</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">Registration Date</th>
+					<th style="text-align: center;">글쓴 날짜</th>
 					<td style="text-align: center;">${article.regDate}</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">Update Date</th>
+					<th style="text-align: center;">수정 날짜</th>
 					<td style="text-align: center;">${article.updateDate}</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">Writer</th>
+					<th style="text-align: center;">작성자</th>
 					<td style="text-align: center;">${article.extra__writer }</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">Title</th>
+					<th style="text-align: center;">제목</th>
 					<td style="text-align: center;">${article.title }</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">Body</th>
+					<th style="text-align: center;">내용</th>
 					<td style="text-align: center;">${article.body }</td>
 				</tr>
 			</tbody>
