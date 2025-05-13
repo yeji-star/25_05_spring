@@ -2,6 +2,10 @@ package com.example.demo.vo;
 
 import java.io.IOException;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+
 import com.example.demo.util.Ut;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +15,10 @@ import lombok.Getter;
 
 // 로그인 총괄 담당
 
+//Before~~를 바꿔서 등록을 한번 해줌 (얘만 하면 오류가 다른 게 나기 때문에 후처리필요)
+// 그래서 Scope~~ 를 써야함
+@Component
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Rq {
 
 	@Getter
@@ -28,14 +36,14 @@ public class Rq {
 		this.resp = resp;
 		this.session = req.getSession();
 
-		HttpSession httpSession = req.getSession();
-
-		if (httpSession.getAttribute("loginedMemberId") != null) {
+		if (session.getAttribute("loginedMemberId") != null) {
 
 			isLogined = true;
-			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 
 		}
+
+		this.req.setAttribute("rq", this);
 	}
 
 	public void printHistoryBack(String msg) throws IOException {
@@ -68,7 +76,12 @@ public class Rq {
 
 	public void login(Member member) {
 		session.setAttribute("loginedMemberId", member.getId());
-		
+
+	}
+
+	public void initBeforeActionInterceptor() {
+		System.err.println("실행됨");
+
 	}
 
 }

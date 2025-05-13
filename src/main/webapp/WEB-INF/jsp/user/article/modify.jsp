@@ -13,7 +13,7 @@
 				<tbody>
 					<tr>
 						<th style="text-align: center;">아이디</th>
-						<td style="text-align: center;">${article.id}</td>
+						<td style="text-align: center;">${member.id}</td>
 					</tr>
 					<tr>
 						<th style="text-align: center;">새 제목</th>
@@ -44,9 +44,9 @@
 
 		<div class="btns">
 			<button type="button" onclick="history.back();">뒤로가기</button>
-			<c:if test="${article.userCanModify }">
-				<a href="../article/modify?id=${article.id}">수정</a>
-			</c:if>
+
+				<a href="../article/doModify?id=${article.id}">수정</a>
+
 		</div>
 	</div>
 </section>

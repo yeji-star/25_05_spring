@@ -26,15 +26,12 @@ import lombok.NoArgsConstructor;
 
 @Controller
 public class UserMemberController {
-
-	private final DemoApplication demoApplication;
+	
+	@Autowired
+	private Rq rq;
 
 	@Autowired
 	private MemberService memberService;
-
-	UserMemberController(DemoApplication demoApplication) {
-		this.demoApplication = demoApplication;
-	}
 
 	// 로그아웃
 
@@ -97,7 +94,7 @@ public class UserMemberController {
 
 	// 로그인 폼 보여주기
 	@RequestMapping("/user/member/login")
-	public String showLogin() {
+	public String showLogin(HttpServletRequest req) {
 		return "/user/member/login";
 	}
 
