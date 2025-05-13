@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.util.Ut;
 
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
+import lombok.Setter;
 
 // 로그인 총괄 담당
 
@@ -19,17 +21,17 @@ import lombok.Getter;
 // 그래서 Scope~~ 를 써야함
 @Component
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Getter
+@Setter
 public class Rq {
 
-	@Getter
-	private boolean isLogined;
-	@Getter
-	private int loginedMemberId;
+	private final HttpServletRequest req;
+	private final HttpServletResponse resp;
+	private final HttpSession session;
 
-	private HttpServletRequest req;
-	private HttpServletResponse resp;
+	private boolean isLogined = false;
 
-	private HttpSession session;
+	private int loginedMemberId = 0;
 
 	public Rq(HttpServletRequest req, HttpServletResponse resp) {
 		this.req = req;
@@ -51,11 +53,15 @@ public class Rq {
 
 		println("<script>");
 
-		if (Ut.isEmpty(msg)) {
-			println("alert('" + msg + "');");
-			println("history.back()");
-			println("</script>");
+		if (!Ut.isEmpty(msg)) {
+			println("alert('" + msg.replace("'", "\\'") + "');");
+
 		}
+
+		println("history.back()");
+		println("</script>");
+		resp.getWriter().flush();
+		resp.getWriter().close();
 
 	}
 

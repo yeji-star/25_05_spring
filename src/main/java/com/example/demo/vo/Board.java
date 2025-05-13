@@ -9,27 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Board {
 
-	public Member(String loginId, String loginPw, String name, String nickname, String email) {
-		this.loginId = loginId;
-		this.loginPw = loginPw;
-		this.name = name;
-		this.nickname = nickname;
-		this.email = email;
-	}
 
 	private int id;
 	private LocalDateTime regDate;
 	private LocalDateTime updateDate;
-	private String loginId;
-	private String loginPw;
+	private String code;
 	private String name;
-	private String nickname;
-	private String email;
 	private boolean delStatus;
 	private LocalDateTime delDate;
-	
+
 
 //	public Article(int id, String title, String body) {
 //		this.id = id;

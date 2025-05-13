@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.DemoApplication;
 import com.example.demo.service.ArticleService;
+import com.example.demo.service.BoardService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.Board;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 import com.mysql.cj.Session;
@@ -32,6 +34,9 @@ public class UserArticleController {
 	@Autowired
 	private ArticleService articleService;
 
+	@Autowired
+	private BoardService boardService;
+	
 	UserArticleController(DemoApplication demoApplication) {
 		this.demoApplication = demoApplication;
 	}
@@ -81,11 +86,15 @@ public class UserArticleController {
 	// 글 리스트
 
 	@RequestMapping("/user/article/list")
-	public String showList(Model model) {
+	public String showList(Model model, int boardId) {
+		
+		
+		Board board = boardService.getBoardById(boardId);
 
 		List<Article> articles = articleService.getArticles();
 
 		model.addAttribute("articles", articles);
+		model.addAttribute("boardId", board);
 
 		return "user/article/list";
 	}
@@ -119,15 +128,26 @@ public class UserArticleController {
 
 	// 수정 폼 보여주기
 	@RequestMapping("/user/article/modify")
-	public String showModify() {
+	public String showModify(HttpServletRequest req, Model model, int id) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+
+		if (article == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다.", id));
+		}
+
+		model.addAttribute("article", article);
+
 		return "/user/article/modify";
 	}
-	
+
 	// 글 수정
 
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
-	public ResultData doModify(HttpServletRequest req, int id, String title, String body) {
+	public String doModify(HttpServletRequest req, int id, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -135,14 +155,14 @@ public class UserArticleController {
 
 		// 게시글 유무 체크
 		if (article == null) {
-			return ResultData.from("F-1", Ut.f("%d번 게시글은 없습니다", id), "없는 글의 id", id);
+			return Ut.jsReplace("F-1", Ut.f("%d번 게시글은 없습니다", id), "../article/list");
 		}
 
 		// 수정할 수 있는 권한 체크
 		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
 
 		if (userCanModifyRd.isfail()) {
-			return userCanModifyRd;
+			return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
 		}
 
 		if (userCanModifyRd.isSuccess()) {
@@ -151,13 +171,14 @@ public class UserArticleController {
 
 		article = articleService.getArticleById(id);
 
-		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "수정된 글", article);
+		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/detail?id=" + id);
 	}
-	
+
 	// 글쓰기 폼 보여주기
 	@RequestMapping("/user/article/write")
-	public String showWrite() {
-		return "/user/article/write";
+	public String showWrite(HttpServletRequest req) {
+
+		return "user/article/write";
 	}
 
 	// 글쓰기
@@ -182,7 +203,7 @@ public class UserArticleController {
 
 		Article article = articleService.getArticleById(id);
 
-		return Ut.jsReplace("S-1", Ut.f("%d번 글이 작성됐습니다.", article.getId()), "../article/list");
+		return Ut.jsReplace(doWriteRd.getResultCode(), doWriteRd.getMsg(), "../article/detail?id=" + id);
 
 	}
 }

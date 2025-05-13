@@ -49,7 +49,7 @@ public class UserMemberController {
 
 	// 회원가입 폼 보여주기
 	@RequestMapping("/user/member/join")
-	public String showJoin() {
+	public String showJoin(HttpServletRequest req) {
 		return "/user/member/join";
 	}
 	
@@ -57,39 +57,39 @@ public class UserMemberController {
 	// 회원가입
 	@RequestMapping("/user/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(HttpServletRequest req, String loginId, String loginPw, String name,
+	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name,
 			String nickname, String email) {
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return ResultData.from("f-1", "아이디를 입력해주세요.");
+			return Ut.jsHistoryBack("f-1", "아이디를 입력해주세요.");
 		}
 
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return ResultData.from("f-2", "비밀번호를 입력해주세요.");
+			return Ut.jsHistoryBack("f-2", "비밀번호를 입력해주세요.");
 		}
 
 		if (Ut.isEmptyOrNull(name)) {
-			return ResultData.from("f-3", "이름을 입력해주세요.");
+			return Ut.jsHistoryBack("f-3", "이름을 입력해주세요.");
 		}
 
 		if (Ut.isEmptyOrNull(email)) {
-			return ResultData.from("f-4", "이메일을 입력해주세요.");
+			return Ut.jsHistoryBack("f-4", "이메일을 입력해주세요.");
 		}
 
 		if (Ut.isEmptyOrNull(nickname)) {
-			return ResultData.from("F-5", "닉네임을 입력해주세요.");
+			return Ut.jsHistoryBack("F-5", "닉네임을 입력해주세요.");
 
 		}
 
-		ResultData doJoinRd = memberService.joinMember(loginId, loginPw, name, nickname, email);
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, email);
 
-		if (doJoinRd.isfail()) {
-			return doJoinRd;
+		if (joinRd.isfail()) {
+			return Ut.jsHistoryBack(joinRd.getResultCode(), joinRd.getMsg());
 		}
 
-		Member member = memberService.getMemberById((int) doJoinRd.getData1());
+		Member member = memberService.getMemberById((int) joinRd.getData1());
 
-		return ResultData.newData(doJoinRd, "새로 생성된 member", member);
+		return Ut.jsReplace(joinRd.getResultCode(), joinRd.getMsg(), "../member/login");
 	}
 
 	// 로그인 폼 보여주기

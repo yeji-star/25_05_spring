@@ -36,7 +36,7 @@ public class MemberService {
 //
 //	}
 
-	public ResultData<Integer> joinMember(String loginId, String loginPw, String name, String nickname, String email) {
+	public ResultData<Integer> join(String loginId, String loginPw, String name, String nickname, String email) {
 
 		Member existsMember = getMemberByLoginId(loginId);
 		System.out.println("existsMember: " + existsMember);
@@ -61,10 +61,6 @@ public class MemberService {
 	private Member getMemberByNameAndEmail(String name, String email) {
 		return memberRepository.getMemberByNameAndEmail(name, email);
 	}
-
-//	public List<Member> getMembers() {
-//		return memberRepository.getMembers();
-//	}
 
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);

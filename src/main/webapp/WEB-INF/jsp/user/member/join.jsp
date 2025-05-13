@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="MEMBER LOGIN"></c:set>
+<c:set var="pageTitle" value="MEMBER JOIN"></c:set>
 <%@ include file="../common/head.jspf"%>
 
 
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<form action="../member/doJoin" method="POST">
-			<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 
 
 				<tbody>
@@ -16,14 +16,14 @@
 					<tr>
 						<th>아이디</th>
 						<td style="text-align: center;">
-							<input name="joinId" autocomplete="off" type="text" placeholder="아이디 입력" />
+							<input name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
 						</td>
 					</tr>
 
 					<tr>
 						<th>비밀번호</th>
 						<td style="text-align: center;">
-							<input name="joinPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+							<input name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
 						</td>
 					</tr>
 

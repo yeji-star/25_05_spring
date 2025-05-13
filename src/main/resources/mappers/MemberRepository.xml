@@ -13,11 +13,11 @@
 		loginId = #{loginId},
 		loginPw = #{loginPw},
 		`name` = #{name},
+		nickname = #{nickname},
 		email = #{email}
 	</insert>
 	
-		<select id="getLastInsertId" parameterType="int"
-		resultType="com.example.demo.vo.Member">
+		<select id="getLastInsertId" parameterType="int">
 		SELECT LAST_INSERT_ID()
 	</select>
 

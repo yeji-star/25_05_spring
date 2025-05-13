@@ -7,9 +7,9 @@
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 
-		<form action="../article/doWrite" method="WRITE">
+		<form action="../article/doWrite" method="POST">
 
-			<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 				<tbody>
 					<tr>
 						<th style="text-align: center;">아이디</th>
@@ -18,7 +18,8 @@
 					<tr>
 						<th style="text-align: center;">제목</th>
 						<td style="text-align: center;">
-							<input style="text-align: center;" type="text" placeholder="제목 입력" name="title" />
+							<input type="text" class="input input-secondary input-md" required="required" name="title" autocomplete="off"
+								placeholder="제목" />
 						</td>
 
 					</tr>
