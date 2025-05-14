@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import com.example.demo.vo.Article;
 @Mapper
 public interface ArticleRepository {
 
-	public int writeArticle(int memberId, String title, String body);
+	public int writeArticle(int memberId, String title, String body, String boardId);
 
 	public void deleteArticle(int id);
 
@@ -28,5 +29,13 @@ public interface ArticleRepository {
 	public int getLastInsertId();
 
 	public Article getForPrintArticle(int loginedMemberId);
+
+	public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake);
+
+	public int getTotalCnt();
+
+	public int getArticlesCount(int boardId);
+
+	
 
 }

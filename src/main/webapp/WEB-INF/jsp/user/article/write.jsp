@@ -16,6 +16,18 @@
 						<td style="text-align: center;">${article.id }</td>
 					</tr>
 					<tr>
+						<th style="text-align: center;">게시판</th>
+						<td style="text-align: center;">
+							<select name="boardId" class="select select-sm select-ghost">
+								<option value="" selected disabled>게시판을 선택해주세요</option>
+								<option value="1">공지사항</option>
+								<option value="2">자유</option>
+								<option value="3">QnA</option>
+							</select>
+						</td>
+
+					</tr>
+					<tr>
 						<th style="text-align: center;">제목</th>
 						<td style="text-align: center;">
 							<input type="text" class="input input-secondary input-md" required="required" name="title" autocomplete="off"

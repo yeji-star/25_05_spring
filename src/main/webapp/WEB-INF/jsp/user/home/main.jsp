@@ -4,7 +4,7 @@
 <c:set var="pageTitle" value="MAIN PAGE"></c:set>
 <%@ include file="../common/head.jspf"%>
 
-<div class="btns text-xl hover:underline">
+<div class="btns text-3xl text-red-800 hover:underline">
 	<a href="../article/write">글쓰기</a>
 </div>
 

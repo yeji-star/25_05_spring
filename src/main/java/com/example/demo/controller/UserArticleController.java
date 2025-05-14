@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,9 +9,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.DemoApplication;
+import com.example.demo.Interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
 import com.example.demo.util.Ut;
@@ -29,16 +33,19 @@ import lombok.NoArgsConstructor;
 @Controller
 public class UserArticleController {
 
-	private final DemoApplication demoApplication;
+	private final BeforeActionInterceptor beforeActionInterceptor;
+
+	@Autowired
+	private Rq rq;
 
 	@Autowired
 	private ArticleService articleService;
 
 	@Autowired
 	private BoardService boardService;
-	
-	UserArticleController(DemoApplication demoApplication) {
-		this.demoApplication = demoApplication;
+
+	UserArticleController(BeforeActionInterceptor beforeActionInterceptor) {
+		this.beforeActionInterceptor = beforeActionInterceptor;
 	}
 
 	// 로그인 체크 -> 유무 체크 -> 권한체크
@@ -86,19 +93,31 @@ public class UserArticleController {
 	// 글 리스트
 
 	@RequestMapping("/user/article/list")
-	public String showList(Model model, int boardId) {
-		
-		
+	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
+			@RequestParam(defaultValue = "1") int page) throws IOException {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
 		Board board = boardService.getBoardById(boardId);
 
-		List<Article> articles = articleService.getArticles();
+		if (board == null) {
+			rq.printHistoryBack("존재하지 않는 게시판입니다.");
+		}
+		
+		int articlesCount =  articleService.getArticlesCount(boardId);
 
+		int itemsInAPage = 10;
+		
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		
+		
+
+		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
-		model.addAttribute("boardId", board);
+		model.addAttribute("board", board);
 
 		return "user/article/list";
 	}
-
 	// 데이터 삭제
 
 	@RequestMapping("/user/article/doDelete")
@@ -185,7 +204,7 @@ public class UserArticleController {
 
 	@RequestMapping("/user/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body, String boardId) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -197,7 +216,11 @@ public class UserArticleController {
 			return Ut.jsHistoryBack("F-2", "내용을 입력하세요.");
 		}
 
-		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
+		if (Ut.isEmptyOrNull(boardId)) {
+			return Ut.jsHistoryBack("F-3", "게시판을 선택해주세요.");
+		}
+
+		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body, boardId);
 
 		int id = (int) doWriteRd.getData1();
 

@@ -3,16 +3,14 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.demo.repository.ArticleRepository">
-
-
+<mapper namespace="com.example.demo.repository.BoardRepository">
 
 
 	<select id="getBoardById" parameterType="int"
 		resultType="com.example.demo.vo.Board">
 		SELECT *
 		FROM board
-		WHERE id = #{id}
+		WHERE id = #{id} AND delStatus = 0
 	</select>
 
 

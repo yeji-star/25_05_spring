@@ -155,7 +155,7 @@ SET boardId = 3
 WHERE id IN (4,5);
 
 UPDATE article 
-SET boardId = 4
+SET boardId = 3
 WHERE id = 6;
 
 SELECT *
@@ -181,10 +181,21 @@ WHERE loginId = 'test4'
 
 SELECT CEILING(RAND() * 3);
 
+INSERT INTO article
+(
+regDate,updateDate, memberId, boardId, title, `body`
+)
+SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목__',RAND()), CONCAT('내용__',RAND())
+FROM article;
+
+SELECT FLOOR(RAND() * 3) + 1;
+
 # 게시글 데이터 대량 생성
 INSERT INTO article
 SET regDate = NOW(),
+updateDate = NOW(),
 memberId = CEILING(RAND() * 3),
+boardId = CEILING(RAND() * 3),
 title = CONCAT('제목__', RAND()),
 `body` = CONCAT('내용__',RAND());
 

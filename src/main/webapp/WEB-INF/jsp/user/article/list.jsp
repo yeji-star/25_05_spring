@@ -5,19 +5,23 @@
 <%@ include file="../common/head.jspf"%>
 
 
-<section class="mt-8 text-xl px-4">
+<section class="mt-24 text-xl px-4">
 	<div class="mx-auto overflow-x-auto">
+
+		<div>${articlesCount }개</div>
+
 		<table class="table glass" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 
 			<thead>
+
 				<tr>
-					<th style="text-align: center;">아이디</th>
+					<th style="text-align: center;">글 번호</th>
 					<th style="text-align: center;">글쓴 날짜</th>
 					<th style="text-align: center;">제목</th>
 					<th style="text-align: center;">글쓴이</th>
 				</tr>
 			</thead>
-			<tbody >
+			<tbody>
 				<c:forEach var="article" items="${articles }">
 					<tr class="hover:bg-base-300">
 						<td style="text-align: center;">${article.id}</td>
@@ -30,6 +34,21 @@
 				</c:forEach>
 			</tbody>
 		</table>
+
+		<div class="join">
+			<button class="join-item btn">1</button>
+			<button class="join-item btn btn-active">2</button>
+			<button class="join-item btn">3</button>
+			<button class="join-item btn">4</button>
+		</div>
+
+		<%-- <div class="page">
+			<c:forEach var="page" items="${page } ">
+			<p>
+			<a class="page == i ? "page" : "" " href="../article/list?page="></a>
+			</c:forEach>
+		</div> --%>
+
 	</div>
 </section>
 

@@ -16,21 +16,21 @@
 					<tr>
 						<th>아이디</th>
 						<td style="text-align: center;">
-							<input name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+							<input name="loginId" autocomplete="off" type="text" class="input input-sm" placeholder="아이디 입력" />
 						</td>
 					</tr>
 
 					<tr>
 						<th>비밀번호</th>
 						<td style="text-align: center;">
-							<input name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+							<input name="loginPw" autocomplete="off" type="text" class="input input-sm" placeholder="비밀번호 입력" />
 						</td>
 					</tr>
 					
 					<tr>
 						<th></th>
 						<td style="text-align: center;">
-							<input value="로그인" type="submit" />
+							<input value="로그인" type="submit" class="input input-accent input-sm hover:bg-base-300"  />
 						</td>
 					</tr>
 
@@ -38,8 +38,8 @@
 			</table>
 		</form>
 		<div class="btns">
-			<button type="button" onclick="history.back();">뒤로가기</button>
-			<a href="../member/join">회원가입</a>
+			<button class="btn btn-sm btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
+			<a class="btn btn-sm btn-ghost float-right" href="../member/join">회원가입</a>
 		</div>
 	</div>
 </section>

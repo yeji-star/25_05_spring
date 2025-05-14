@@ -16,35 +16,35 @@
 					<tr>
 						<th>아이디</th>
 						<td style="text-align: center;">
-							<input name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+							<input name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" class="input input-sm" />
 						</td>
 					</tr>
 
 					<tr>
 						<th>비밀번호</th>
 						<td style="text-align: center;">
-							<input name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+							<input name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" class="input input-sm" />
 						</td>
 					</tr>
 
 					<tr>
 						<th>이름</th>
 						<td style="text-align: center;">
-							<input name="name" autocomplete="off" type="text" placeholder="이름 입력" />
+							<input name="name" autocomplete="off" type="text" placeholder="이름 입력" class="input input-sm" />
 						</td>
 					</tr>
 
 					<tr>
 						<th>닉네임</th>
 						<td style="text-align: center;">
-							<input name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" />
+							<input name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" class="input input-sm" />
 						</td>
 					</tr>
 
 					<tr>
 						<th>이메일</th>
 						<td style="text-align: center;">
-							<input name="email" autocomplete="off" type="text" placeholder="이메일 입력" />
+							<input name="email" autocomplete="off" type="text" placeholder="이메일 입력" class="input input-sm" />
 						</td>
 					</tr>
 
@@ -59,7 +59,7 @@
 			</table>
 		</form>
 		<div class="btns">
-			<button type="button" onclick="history.back();">뒤로가기</button>
+			<button class="btn btn-sm btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 		</div>
 	</div>
 </section>
