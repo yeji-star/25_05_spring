@@ -103,18 +103,24 @@ public class UserArticleController {
 		if (board == null) {
 			rq.printHistoryBack("존재하지 않는 게시판입니다.");
 		}
-		
-		int articlesCount =  articleService.getArticlesCount(boardId);
 
+		int articlesCount = articleService.getArticlesCount(boardId);
+
+		// 한 페이지에 글 10개씩
+		// 글 20 -> 2page
+		// 글 25 -> 3page
 		int itemsInAPage = 10;
 		
+		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
+
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
-		
-		
 
 		model.addAttribute("articlesCount", articlesCount);
+		model.addAttribute("pagesCount", pagesCount);
 		model.addAttribute("articles", articles);
+		model.addAttribute("boardId", boardId);
 		model.addAttribute("board", board);
+		model.addAttribute("page", page);
 
 		return "user/article/list";
 	}

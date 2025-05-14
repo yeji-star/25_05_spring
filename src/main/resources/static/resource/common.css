@@ -11,14 +11,14 @@
 
 html {
 	height: 100%;
-	background-color: aliceblue;
 }
 
 html>body {
 	font-family: 'GowunDodum-Regular', sans;
-	
 	height: 100%;
+	background: aliceblue;
 
+	
 }
 
 a {
@@ -39,7 +39,6 @@ header>div>ul>li>ul>li {
 }
 
 header>div>ul>li>ul {
-	background-color: white;
 	display: none;
 	position: absolute;
 }
