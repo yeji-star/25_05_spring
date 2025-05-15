@@ -94,7 +94,8 @@ public class UserArticleController {
 
 	@RequestMapping("/user/article/list")
 	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page) throws IOException {
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") String SearchKeywordTypeCode,
+			@RequestParam(defaultValue = "") String SearchKeyword) throws IOException {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -104,13 +105,13 @@ public class UserArticleController {
 			rq.printHistoryBack("존재하지 않는 게시판입니다.");
 		}
 
-		int articlesCount = articleService.getArticlesCount(boardId);
+		int articlesCount = articleService.getArticlesCount(boardId, SearchKeywordTypeCode, SearchKeyword);
 
 		// 한 페이지에 글 10개씩
 		// 글 20 -> 2page
 		// 글 25 -> 3page
 		int itemsInAPage = 10;
-		
+
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);

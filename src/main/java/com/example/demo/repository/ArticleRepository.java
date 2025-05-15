@@ -34,7 +34,7 @@ public interface ArticleRepository {
 
 	public int getTotalCnt();
 
-	public int getArticlesCount(int boardId);
+	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword);
 
 	
 

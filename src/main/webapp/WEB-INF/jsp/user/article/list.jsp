@@ -10,6 +10,29 @@
 
 		<div>${articlesCount }개</div>
 
+		<!-- 검색창 -->
+
+<div class="container float-right m-2">
+		<div class="row">
+			<form method="post" name="search" action="searchbbs.jsp">
+				<table class="pull-right">
+					<tr>
+						<td><select class="form-control select select-sm" name="searchField">
+								<option value="0">선택</option>
+								<option value="bbsTitle">제목</option>
+								<option value="userID">작성자</option>
+						</select></td>
+						<td><input type="text" class="form-control input-sm"
+							placeholder="검색어 입력" name="searchText" maxlength="100"></td>
+						<td><button type="submit" class="btn btn-success btn-sm">검색</button></td>
+					</tr>
+
+				</table>
+			</form>
+		</div>
+	</div>
+
+
 		<table class="table glass" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 
 			<thead>
@@ -68,7 +91,7 @@
 		</div>
 	</div>
 
-	<!-- 직관적인 페이징 -->
+	<%-- 	<!-- 직관적인 페이징 -->
 	<div class="flex justify-center mt-4">
 		<div class="btn-group join">
 
@@ -77,7 +100,7 @@
 				<a class="join-item btn btn-sm ${param.page == i ? 'btn-active' : ''}" href="?page=${i }&boardId=${param.boardId }">${i }</a>
 			</c:forEach>
 		</div>
-	</div>
+	</div> --%>
 </section>
 
 
