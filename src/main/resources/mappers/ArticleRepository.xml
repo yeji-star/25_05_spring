@@ -32,6 +32,13 @@
 		</set>
 		WHERE id = #{id}
 	</update>
+	
+	
+		<update id="increaseHitCount" parameterType="map">
+		UPDATE article
+		SET hitCount = hitCount + 1
+		WHERE id = #{id}
+	</update>
 
 	<select id="getArticlesCount" parameterType="int">
 		SELECT COUNT(*) as cnt

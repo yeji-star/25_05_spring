@@ -7,10 +7,60 @@
 
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
+		<div class="mb-4 flex">
+			<div>${articlesCount }개</div>
+			<div class="flex-grow"></div>
 
-		<div>${articlesCount }개</div>
+			<!-- 검색창 -->
 
-		<!-- 검색창 -->
+			<form action="">
+				<input type="hidden" name="boardId" value="${param.boardId }">
+				<div class="flex">
+					<select class="select select-sm select-bordered max-w-xs" name="searchKeywordTypeCode"
+						data-value="${param.searchKeywordTypeCode }">
+						<option value="title">제목</option>
+						<option value="body">내용</option>
+						<option value="nickname">작성자</option>
+					</select>
+					<label class="input input-bordered input-sm flex items-center gap-2">
+						<input type="text" placeholder="검색" name="searchKeyword" value="${param.searchKeyword }" />
+						<button class="btn btn-sm" type="submit">
+							<!-- 버튼모양 -->
+							검색
+						</button>
+					</label>
+				</div>
+			</form>
+
+			<%-- 			<div class="flex justify-end my-4">
+				<table>
+					<tr>
+						<td>
+							<select class="select select-sm" name="searchKeywordTypeCode">
+								<option value="title">제목</option>
+								<option value="body">내용</option>
+								<option value="nickname">작성자</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" class="input-sm" placeholder="검색어 입력" name="searchKeyword">
+						</td>
+						<td>
+							<c:if test=""></c:if>
+							<a class="btn btn-sm"
+								href="list?boardId=${boardId}&searchKeywordTypeCode=${searchKeywordTypeCode }&searchKeyword=${searchKeyword }">검색</a>
+						</td>
+					</tr>
+				</table>
+			</div> --%>
+		</div>
+
+
+		<!-- search input에다가 btn 앞에잇는 건 select고  -->
+
+
+
+
 
 		<%-- 		<div class="container float-right m-2">
 			<div class="row">
@@ -48,7 +98,8 @@
 					<th style="text-align: center;">글 번호</th>
 					<th style="text-align: center;">글쓴 날짜</th>
 					<th style="text-align: center;">제목</th>
-					<th style="text-align: center;">글쓴이</th>
+					<th style="text-align: center;">작성자</th>
+					<th style="text-align: center;">조회수</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -60,6 +111,7 @@
 							<a class="hover:underline" href="detail?id=${article.id }">${article.title }</a>
 						</td>
 						<td style="text-align: center;">${article.extra__writer }</td>
+						<td style="text-align: center;">${article.hitCount }</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -68,8 +120,11 @@
 
 
 	</div>
+
+
+
 	<!-- 	동적 페이징 -->
-	<div class="flex justify-center mt-4">
+	<div class="flex justify-center mt-2">
 		<div class="btn-group join ">
 			<c:set var="paginationLen" value="3" />
 			<c:set var="startPage" value="${page - paginationLen >= 1 ? page - paginationLen : 1 }" />
@@ -102,6 +157,8 @@
 			</c:if>
 		</div>
 	</div>
+
+
 
 	<%-- 	<!-- 직관적인 페이징 -->
 	<div class="flex justify-center mt-4">

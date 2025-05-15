@@ -5,7 +5,7 @@
 <%@ include file="../common/head.jspf"%>
 
 
-<section class="mt-8 text-xl px-4">
+<section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
 
 
@@ -23,6 +23,10 @@
 				<tr>
 					<th style="text-align: center;">수정 날짜</th>
 					<td style="text-align: center;">${article.updateDate}</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">조회수</th>
+					<td style="text-align: center;">${article.hitCount }</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">작성자</th>
