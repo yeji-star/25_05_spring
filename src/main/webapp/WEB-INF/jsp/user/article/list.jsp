@@ -12,25 +12,32 @@
 
 		<!-- 검색창 -->
 
-<div class="container float-right m-2">
-		<div class="row">
-			<form method="post" name="search" action="searchbbs.jsp">
-				<table class="pull-right">
-					<tr>
-						<td><select class="form-control select select-sm" name="searchField">
-								<option value="0">선택</option>
-								<option value="bbsTitle">제목</option>
-								<option value="userID">작성자</option>
-						</select></td>
-						<td><input type="text" class="form-control input-sm"
-							placeholder="검색어 입력" name="searchText" maxlength="100"></td>
-						<td><button type="submit" class="btn btn-success btn-sm">검색</button></td>
-					</tr>
+		<%-- 		<div class="container float-right m-2">
+			<div class="row">
+				<form method="post" name="search"
+					action="list?&boardId=${boardId}&searchKeyword=${searchKeyword}&searchKeywordTypeCode=${searchKeywordTypeCode}">
+					<table class="pull-right">
+						<tr>
+							<td>
+								<select class="form-control select select-sm" name="searchField">
+									<option disabled selected>검색</option>
+									<option value="title">제목</option>
+									<option value="body">내용</option>
+									<option value="nickname">작성자</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" class="form-control input-sm" placeholder="검색어 입력" name="searchText" maxlength="100">
+							</td>
+							<td>
+								<button type="submit" class="btn btn-accent btn-sm">검색</button>
+							</td>
+						</tr>
 
-				</table>
-			</form>
-		</div>
-	</div>
+					</table>
+				</form>
+			</div>
+		</div> --%>
 
 
 		<table class="table glass" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
@@ -68,8 +75,13 @@
 			<c:set var="startPage" value="${page - paginationLen >= 1 ? page - paginationLen : 1 }" />
 			<c:set var="endPage" value="${page + paginationLen <= pagesCount ? page + paginationLen : pagesCount}" />
 
+			<!-- baseUri 변수 선언 -->
+			<c:set var="baseUri" value="?boardId=${boardId }"></c:set>
+			<c:set var="baseUri" value="${baseUri }&searchKeywordTypeCode=${searchKeywordTypeCode }"></c:set>
+			<c:set var="baseUri" value="${baseUri }&searchKeyword=${searchKeyword }"></c:set>
+
 			<c:if test="${startPage > 1}">
-				<a class="join-item btn btn-sm" href="?page=1&boardId=${boardId}">1</a>
+				<a class="join-item btn btn-sm" href="${baseUri }&page=1">1</a>
 			</c:if>
 
 			<c:if test="${startPage > 2}">
@@ -78,7 +90,7 @@
 
 
 			<c:forEach begin="${startPage }" end="${endPage }" var="i">
-				<a class="join-item btn btn-sm ${param.page == i ? 'btn-active' : ''}" href="?page=${i }&boardId=${boardId}">${i }</a>
+				<a class="join-item btn btn-sm ${param.page == i ? 'btn-active' : ''}" href="${baseUri }&page=${i }">${i }</a>
 			</c:forEach>
 
 			<c:if test="${endPage < pagesCount - 1}">
@@ -86,7 +98,7 @@
 			</c:if>
 
 			<c:if test="${endPage < pagesCount}">
-				<a class="join-item btn btn-sm" href="?page=${pagesCount }&boardId=${boardId}">${pagesCount }</a>
+				<a class="join-item btn btn-sm" href="${baseUri }&page=${pagesCount }">${pagesCount }</a>
 			</c:if>
 		</div>
 	</div>
@@ -101,6 +113,7 @@
 			</c:forEach>
 		</div>
 	</div> --%>
+
 </section>
 
 

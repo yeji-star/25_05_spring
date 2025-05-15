@@ -94,8 +94,8 @@ public class UserArticleController {
 
 	@RequestMapping("/user/article/list")
 	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") String SearchKeywordTypeCode,
-			@RequestParam(defaultValue = "") String SearchKeyword) throws IOException {
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "title") String SearchKeywordTypeCode,
+			@RequestParam(defaultValue = "") String searchKeyword) throws IOException {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -105,7 +105,7 @@ public class UserArticleController {
 			rq.printHistoryBack("존재하지 않는 게시판입니다.");
 		}
 
-		int articlesCount = articleService.getArticlesCount(boardId, SearchKeywordTypeCode, SearchKeyword);
+		int articlesCount = articleService.getArticlesCount(boardId, SearchKeywordTypeCode, searchKeyword);
 
 		// 한 페이지에 글 10개씩
 		// 글 20 -> 2page
@@ -114,9 +114,12 @@ public class UserArticleController {
 
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, SearchKeywordTypeCode,
+				searchKeyword);
 
 		model.addAttribute("articlesCount", articlesCount);
+		model.addAttribute("SearchKeywordTypeCode", SearchKeywordTypeCode);
+		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("pagesCount", pagesCount);
 		model.addAttribute("articles", articles);
 		model.addAttribute("boardId", boardId);
