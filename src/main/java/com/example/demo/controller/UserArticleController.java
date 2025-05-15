@@ -76,20 +76,33 @@ public class UserArticleController {
 		return ResultData.from("S-1", Ut.f("%d번 게시글입니다.", id), "게시글 1row", article);
 	}
 
-	// 상세 페이지
+	// 상세 페이지 - 조회수 기능 없음
 
 	@RequestMapping("/user/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-		
-		articleService.increaseHitCount(id);
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		model.addAttribute("article", article);
 
 		return "user/article/detail";
+	}
+	
+	// 상세 페이지 - 조회수 기능 있음
+
+	@RequestMapping("/user/article/doIncreaseHitCountRd")
+	@ResponseBody // 추가해서 jsp로 보내는 목적이 아님
+	public ResultData doIncreaseHitCount(int id) {
+		
+		ResultData increaseHitCountRd = articleService.increaseHitCount(id);
+		
+		if(increaseHitCountRd.isfail()) {
+			return increaseHitCountRd;
+		}
+
+		return ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
 	}
 
 	// 글 리스트

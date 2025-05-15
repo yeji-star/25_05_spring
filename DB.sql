@@ -142,6 +142,8 @@ WHERE id IN (2, 6);
 #boardId 추가
 ALTER TABLE article ADD COLUMN boardId INT(10) UNSIGNED NOT NULL AFTER `memberId`;
 
+ALTER TABLE article UPDATE COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER updateDate;
+
 UPDATE article 
 SET boardId = 1
 WHERE id IN (1, 2);
@@ -171,6 +173,31 @@ FROM board;
 
 
 ######################################################################
+
+SELECT COUNT(*)
+FROM article
+WHERE boardId = 1
+ORDER BY id DESC;
+
+SELECT A.*, M.nickname AS extra__writer
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+WHERE A.id = 1;
+
+SELECT A.*, M.nickname AS extra__writer
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+WHERE 1
+AND boardId = 1
+AND title LIKE CONCAT('%12%')
+ORDER BY A.id DESC
+LIMIT 0, 20
+
+SELECT COUNT(*)
+FROM article
+ORDER BY id DESC;
 
 SELECT LAST_INSERT_ID();
 

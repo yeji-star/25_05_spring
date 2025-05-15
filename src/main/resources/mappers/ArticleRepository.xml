@@ -32,13 +32,19 @@
 		</set>
 		WHERE id = #{id}
 	</update>
-	
-	
-		<update id="increaseHitCount" parameterType="map">
+
+	<update id="increaseHitCount" parameterType="map">
 		UPDATE article
-		SET hitCount = hitCount + 1
+		SET
+		hitCount = hitCount + 1
 		WHERE id = #{id}
 	</update>
+
+	<select id="getArticleHitCount" parameterType="int">
+		SELECT hitCount
+		FROM article
+		WHERE id = #{id}
+	</select>
 
 	<select id="getArticlesCount" parameterType="int">
 		SELECT COUNT(*) as cnt
@@ -116,7 +122,8 @@
 				</when>
 
 				<when test="searchKeywordTypeCode == 'nickname'">
-					AND A.nickname LIKE CONCAT('%', #{searchKeyword}, '%')
+					AND A.nickname LIKE CONCAT('%', #{searchKeyword},
+					'%')
 				</when>
 
 				<otherwise>

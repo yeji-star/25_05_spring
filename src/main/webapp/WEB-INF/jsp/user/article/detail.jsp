@@ -4,6 +4,29 @@
 <c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+<script>
+	const params = {};
+	params.id = parseInt('${param.id}');
+</script>
+
+<script>
+	function ArticleDetail__doIncreaseHitCount() {
+		$.get('../article/doIncreaseHitCountRd', {
+			id : params.id,
+			ajaxMode : 'Y'
+		}, function(data) {
+			console.log(data);
+			console.log(data.data1);
+			console.log(data.msg);
+			$('.article-detail__hit-count').html(data.data1);
+		}, 'json');
+	}
+
+	$(function() {
+		ArticleDetail__doIncreaseHitCount();
+		/* setTimeout( ArticleDetail__doIncreaseHitCount(), 2000); */
+	})
+</script>
 
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
@@ -26,7 +49,11 @@
 				</tr>
 				<tr>
 					<th style="text-align: center;">조회수</th>
-					<td style="text-align: center;">${article.hitCount }</td>
+					<td style="text-align: center;">
+					<span class="article-detail__hit-count">
+					${article.hitCount }
+					</span>
+					</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">작성자</th>
@@ -49,7 +76,7 @@
 
 		<div class="btns">
 			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
-			
+
 			<c:if test="${article.userCanDelete }">
 				<a class="btn btn-ghost float-right" href="../article/doDelete?id=${article.id}">삭제</a>
 			</c:if>

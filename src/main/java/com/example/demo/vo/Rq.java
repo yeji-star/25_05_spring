@@ -90,4 +90,10 @@ public class Rq {
 
 	}
 
+	public String historyBackOnView(String msg) {
+		req.setAttribute("msq", msg);
+		req.setAttribute("historyBack", true);
+		return "user/common/js";
+	}
+
 }
