@@ -62,36 +62,6 @@
 
 
 
-
-
-		<%-- 		<div class="container float-right m-2">
-			<div class="row">
-				<form method="post" name="search"
-					action="list?&boardId=${boardId}&searchKeyword=${searchKeyword}&searchKeywordTypeCode=${searchKeywordTypeCode}">
-					<table class="pull-right">
-						<tr>
-							<td>
-								<select class="form-control select select-sm" name="searchField">
-									<option disabled selected>검색</option>
-									<option value="title">제목</option>
-									<option value="body">내용</option>
-									<option value="nickname">작성자</option>
-								</select>
-							</td>
-							<td>
-								<input type="text" class="form-control input-sm" placeholder="검색어 입력" name="searchText" maxlength="100">
-							</td>
-							<td>
-								<button type="submit" class="btn btn-accent btn-sm">검색</button>
-							</td>
-						</tr>
-
-					</table>
-				</form>
-			</div>
-		</div> --%>
-
-
 		<table class="table glass" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 
 			<thead>
@@ -102,6 +72,7 @@
 					<th style="text-align: center;">제목</th>
 					<th style="text-align: center;">작성자</th>
 					<th style="text-align: center;">조회수</th>
+					<th style="text-align: center;">좋아요</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -114,6 +85,7 @@
 						</td>
 						<td style="text-align: center;">${article.extra__writer }</td>
 						<td style="text-align: center;">${article.hitCount }</td>
+						<td style="text-align: center;">${article.extra__sumPoint }</td>
 					</tr>
 				</c:forEach>
 			</tbody>

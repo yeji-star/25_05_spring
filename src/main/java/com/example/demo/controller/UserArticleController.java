@@ -128,6 +128,7 @@ public class UserArticleController {
 		int itemsInAPage = 10;
 
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
+	
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, SearchKeywordTypeCode,
 				searchKeyword);

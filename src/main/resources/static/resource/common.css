@@ -9,16 +9,9 @@
 	font-style: normal;
 }
 
-html {
-	height: 100%;
-}
-
 html>body {
 	font-family: 'GowunDodum-Regular', sans;
-	height: 100%;
-	background: aliceblue;
-
-	
+	background-color: aliceblue;
 }
 
 a {

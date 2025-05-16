@@ -142,7 +142,66 @@ WHERE id IN (2, 6);
 #boardId 추가
 ALTER TABLE article ADD COLUMN boardId INT(10) UNSIGNED NOT NULL AFTER `memberId`;
 
-ALTER TABLE article UPDATE COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER updateDate;
+# 조회수 추가
+ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER updateDate;
+
+# reactionPoint 테이블 생성
+
+CREATE TABLE reactionPoint (
+	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+	memberId INT(10) UNSIGNED NOT NULL,
+	relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
+	relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
+	`point` INT(10) NOT NULL
+);
+
+# reactionPoint 테스트 데이터 생성
+# 1번 회원이 1번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 1번 회원이 2번 글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'article',
+relId = 2,
+`point` = 1;
+
+# 2번 회원이 1번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 2번 회원이 2번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 2,
+`point` = -1;
+
+# 3번 회원이 1번 글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`point` = 1;
 
 UPDATE article 
 SET boardId = 1
@@ -170,9 +229,17 @@ FROM `member`;
 SELECT *
 FROM board;
 
+#reiId 가 게시글 번호였음
+SELECT *
+FROM reactionPoint;
+
 
 
 ######################################################################
+
+SELECT hitCount
+FROM article
+WHERE id = 1;
 
 SELECT COUNT(*)
 FROM article
@@ -184,6 +251,52 @@ FROM article AS A
 INNER JOIN `member` AS M
 ON A.memberId = M.id
 WHERE A.id = 1;
+
+# LEFT JOIN
+SELECT A.*, M.nickname AS extra__writer, SUM(rp.point)
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS rp
+ON a.id = rp.relId AND rp.relTypeCode = 'article'
+GROUP BY a.id
+ORDER BY a.id DESC;
+
+SELECT A.*, M.nickname AS extra__writer, rp.point
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS rp
+ON a.id = rp.relId AND rp.relTypeCode = 'article'
+WHERE A.id = 3;
+
+# 서브 쿼리
+SELECT A.*,
+IFNULL(SUM(rp.point),0) AS extra_sumPoint,
+IFNULL(SUM(IF(rp.point > 0, rp.point, 0)),0) AS extra_goodPoint,
+IFNULL(SUM(IF(rp.point < 0, rp.point, 0)),0) AS extra_badPoint
+FROM (
+	SELECT a.*, m.nickname AS extra__writer
+	FROM article AS a
+	INNER JOIN `member` AS m
+	ON a.memberId = m.id) AS a
+LEFT JOIN reactionPoint AS rp
+ON a.id = rp.relId AND rp.relTypeCode = 'article'
+GROUP BY a.id
+ORDER BY a.id DESC;
+
+# JOIN 버전
+SELECT A.*, m.nickname AS extra__writer,
+IFNULL(SUM(rp.point),0) AS extra_sumPoint,
+IFNULL(SUM(IF(rp.point > 0, rp.point, 0)),0) AS extra_goodPoint,
+IFNULL(SUM(IF(rp.point < 0, rp.point, 0)),0) AS extra_badPoint
+FROM article AS a
+INNER JOIN `member` AS m
+ON a.memberId = m.id
+LEFT JOIN reactionPoint AS rp
+ON a.id = rp.relId AND rp.relTypeCode = 'article'
+GROUP BY a.id
+ORDER BY a.id DESC;
 
 SELECT A.*, M.nickname AS extra__writer
 FROM article AS A

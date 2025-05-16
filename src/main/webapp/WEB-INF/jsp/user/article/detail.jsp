@@ -50,10 +50,16 @@
 				<tr>
 					<th style="text-align: center;">조회수</th>
 					<td style="text-align: center;">
-					<span class="article-detail__hit-count">
-					${article.hitCount }
-					</span>
+						<span class="article-detail__hit-count"> ${article.hitCount } </span>
 					</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">좋아요</th>
+					<td style="text-align: center;">${article.extra__goodPoint }</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">싫어요</th>
+					<td style="text-align: center;">${article.extra__badPoint }</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">작성자</th>
@@ -73,6 +79,12 @@
 				</tr>
 			</tbody>
 		</table>
+		<div class="mt-4" style="text-align: center;">
+
+			<button class="btn">좋아요</button>
+			<button class="btn">싫어요</button>
+
+
 
 		<div class="btns">
 			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
