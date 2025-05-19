@@ -233,6 +233,23 @@ FROM board;
 SELECT *
 FROM reactionPoint;
 
+# article 테이블에 reactionPoint(좋아요) 컬럼 추가
+ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+
+# update join -> 기존 게시글의 good bad RP 값을 RP 테이블에서 추출해서 article 테이블에 채우기
+UPDATE article AS A
+INNER JOIN (
+	SELECT RP.relTypeCode, RP.relId,
+	IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0) AS goodReactionPoint,
+	IFNULL(SUM(IF(RP.point < 0, RP.point, 0)),0) AS badReactionPoint
+	FROM reactionPoint AS RP
+	GROUP BY RP.relTypeCode, RP.relId
+) AS RP_SUM
+ON A.id = RP_SUM.relId
+SET A.goodReactionPoint = RP_SUM.goodReactionPoint,
+A.badReactionPoint = RP_SUM.badReactionPoint;
+
 
 
 ######################################################################
@@ -241,9 +258,9 @@ SELECT hitCount
 FROM article
 WHERE id = 1;
 
-SELECT COUNT(*)
+SELECT count(*)
 FROM article
-WHERE boardId = 1
+where boardId = 1
 ORDER BY id DESC;
 
 SELECT A.*, M.nickname AS extra__writer
@@ -259,27 +276,27 @@ INNER JOIN `member` AS M
 ON A.memberId = M.id
 LEFT JOIN reactionPoint AS rp
 ON a.id = rp.relId AND rp.relTypeCode = 'article'
-GROUP BY a.id
-ORDER BY a.id DESC;
+group by a.id
+order by a.id desc;
 
 SELECT A.*, M.nickname AS extra__writer, rp.point
 FROM article AS A
 INNER JOIN `member` AS M
 ON A.memberId = M.id
-LEFT JOIN reactionPoint AS rp
-ON a.id = rp.relId AND rp.relTypeCode = 'article'
+left join reactionPoint as rp
+on a.id = rp.relId and rp.relTypeCode = 'article'
 WHERE A.id = 3;
 
 # 서브 쿼리
 SELECT A.*,
-IFNULL(SUM(rp.point),0) AS extra_sumPoint,
-IFNULL(SUM(IF(rp.point > 0, rp.point, 0)),0) AS extra_goodPoint,
-IFNULL(SUM(IF(rp.point < 0, rp.point, 0)),0) AS extra_badPoint
+ifnull(sum(rp.point),0) as extra__sumPoint,
+IFNULL(SUM(if(rp.point > 0, rp.point, 0)),0) AS goodReactionPoint,
+IFNULL(SUM(IF(rp.point < 0, rp.point, 0)),0) AS badReactionPoint
 FROM (
-	SELECT a.*, m.nickname AS extra__writer
-	FROM article AS a
-	INNER JOIN `member` AS m
-	ON a.memberId = m.id) AS a
+	select a.*, m.nickname as extra__writer
+	from article AS a
+	inner join `member` as m
+	on a.memberId = m.id) as a
 LEFT JOIN reactionPoint AS rp
 ON a.id = rp.relId AND rp.relTypeCode = 'article'
 GROUP BY a.id
@@ -287,9 +304,9 @@ ORDER BY a.id DESC;
 
 # JOIN 버전
 SELECT A.*, m.nickname AS extra__writer,
-IFNULL(SUM(rp.point),0) AS extra_sumPoint,
-IFNULL(SUM(IF(rp.point > 0, rp.point, 0)),0) AS extra_goodPoint,
-IFNULL(SUM(IF(rp.point < 0, rp.point, 0)),0) AS extra_badPoint
+IFNULL(SUM(rp.point),0) AS sumReactionPoint,
+IFNULL(SUM(IF(rp.point > 0, rp.point, 0)),0) AS goodReactionPoint,
+IFNULL(SUM(IF(rp.point < 0, rp.point, 0)),0) AS badReactionPoint
 FROM article AS a
 INNER JOIN `member` AS m
 ON a.memberId = m.id
@@ -308,6 +325,34 @@ AND title LIKE CONCAT('%12%')
 ORDER BY A.id DESC
 LIMIT 0, 20
 
+# 리스트 좋아요
+
+SELECT A.*, M.nickname AS extra__writer,
+IFNULL(SUM(RP.point),0) AS sumReactionPoint
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+WHERE 1 AND boardId = 1
+GROUP BY A.id
+ORDER BY A.id DESC
+LIMIT 0, 5
+
+# 포인트 추가
+
+SELECT A.*, M.nickname AS extra__writer, SUM(rp.point)
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS rp
+ON a.id = rp.relId AND rp.relTypeCode = 'article'
+GROUP BY a.id
+ORDER BY a.id DESC;
+	
+	# 포인트 추가? 	
+insert into reactionPoint (`point`) value(-1);
+
 SELECT COUNT(*)
 FROM article
 ORDER BY id DESC;
@@ -321,21 +366,21 @@ WHERE loginId = 'test4'
 
 SELECT CEILING(RAND() * 3);
 
-INSERT INTO article
+INSERT INto article
 (
 regDate,updateDate, memberId, boardId, title, `body`
 )
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목__',RAND()), CONCAT('내용__',RAND())
-FROM article;
+select now(), now(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, concat('제목__',rand()), concat('내용__',rand())
+from article;
 
-SELECT FLOOR(RAND() * 3) + 1;
+select floor(rand() * 3) + 1;
 
 # 게시글 데이터 대량 생성
 INSERT INTO article
 SET regDate = NOW(),
-updateDate = NOW(),
+updateDate = now(),
 memberId = CEILING(RAND() * 3),
-boardId = CEILING(RAND() * 3),
+boardId = ceiling(Rand() * 3),
 title = CONCAT('제목__', RAND()),
 `body` = CONCAT('내용__',RAND());
 

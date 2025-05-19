@@ -86,7 +86,7 @@ public class Rq {
 	}
 
 	public void initBeforeActionInterceptor() {
-		System.err.println("실행됨");
+		System.err.println("initBeforeActionInterceptor 실행됨");
 
 	}
 
@@ -94,6 +94,20 @@ public class Rq {
 		req.setAttribute("msq", msg);
 		req.setAttribute("historyBack", true);
 		return "user/common/js";
+	}
+	
+	public String getCurrentUri() {
+		String currentUri = req.getRequestURI();
+		String queryString = req.getQueryString();
+		
+		System.out.println(currentUri);
+		System.out.println(queryString);
+		
+		if(currentUri != null && queryString != null) {
+			currentUri += "?" + queryString;
+		}
+		
+		return currentUri;
 	}
 
 }

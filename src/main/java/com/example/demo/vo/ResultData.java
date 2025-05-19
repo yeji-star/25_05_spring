@@ -11,6 +11,10 @@ public class ResultData<DT> {
 	private DT data1;
 	@Getter
 	private String data1Name;
+	@Getter
+	private DT data2;
+	@Getter
+	private String data2Name;
 
 	public static <DT> ResultData<DT> from(String ResultCode, String msg) {
 		return from(ResultCode, msg, null, null);
@@ -22,6 +26,19 @@ public class ResultData<DT> {
 		rd.msg = msg;
 		rd.data1 = data;
 		rd.data1Name = data1Name;
+
+		return rd;
+	}
+
+	public static <DT> ResultData<DT> from(String ResultCode, String msg, String data1Name, DT data1, String data2Name,
+			DT data2) {
+		ResultData<DT> rd = new ResultData<DT>();
+		rd.ResultCode = ResultCode;
+		rd.msg = msg;
+		rd.data1 = data1;
+		rd.data1Name = data1Name;
+		rd.data2 = data2;
+		rd.data2Name = data2Name;
 
 		return rd;
 	}

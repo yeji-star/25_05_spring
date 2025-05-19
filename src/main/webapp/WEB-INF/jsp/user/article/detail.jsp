@@ -4,28 +4,159 @@
 <c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+<!-- 변수 -->
+
 <script>
 	const params = {};
 	params.id = parseInt('${param.id}');
+	
+	var isAlreadyAddGoodRp = ${isAlreadyAddGoodRp};
+	var isAlreadyAddBadRp = ${isAlreadyAddBadRp};
+</script>
+
+<!-- 좋아요 싫어요 -->
+<script>
+/* 좋아요 싫어요 버튼 */
+ function checkRP() {
+	if(isAlreadyAddGoodRp == true) {
+		$('#likeButton').toggleClass('btn-outline');
+	} else if (isAlreadyBadRp == true) {
+		$('#DislikeButton').toggleClass('btn-outline');
+	} else {
+		return;
+	}
+}
+ 
+ function doGoodReaction(articleId) {
+	$.ajax({
+		url: 'user/reactionPoint/doGoodReaction',
+		type: 'POST',
+		data: {
+			relTypeCode: 'article',
+			relId: articleId
+		},
+		dataType: 'json',
+		success: function(data) {
+			console.log(data);
+			console.log('data.data1Name : ' + data.data1Name);
+			console.log('data.data1 : ' + data.data1);
+			console.log('data.data2Name : ' + data.data2Name);
+			console.log('data.data2 : ' + data.data2);
+			
+			if(data.resultCode.startsWith('S-')) {
+				var likeButton = $('#likeButton');
+				var likeCount = $('#likeCount');
+				var likeCountC = $('.likeCount');				
+				var DislikeButton = $('#DislikeButton');
+				var DislikeCount = $('#DislikeCount');
+				var DislikeCountC = $('.DislikeCount');
+				
+				if (data.resultCode == 'S-1') {
+					likeButton.toggleClass('btn-outline');
+					likeCount.text(data.data1);
+					likeCountC.text(data.data1);
+				} else if (data.resultCode == 'S-2') {
+					DislikeButton.toggleClass('btn-outline');
+					DislikeCount.text(data.data2);
+					DislikeCountC.text(data.data2);
+					
+					likeButton.toggleClass('btn-outline');
+					likeCount.text(data.data1);
+					likeCountC.text(data.data1);
+				} else {
+					likeButton.toggleClass('btn-outline');
+					likeCount.text(data.data1);
+					likeCountC.text(data.data1);
+				}
+			} else {
+				alert(data.msg);
+			}
+		},
+		error: function(jdXHR, textStatus, errorThrown) {
+			alert('좋아요 오류 발생 : ' + textStatus);
+		}
+	});
+}
+ 
+ function doBadReaction(articleId) {
+		$.ajax({
+			url: 'user/reactionPoint/doBadReaction',
+			type: 'POST',
+			data: {
+				relTypeCode: 'article',
+				relId: articleId
+			},
+			dataType: 'json',
+			success: function(data) {
+				console.log(data);
+				console.log('data.data1Name : ' + data.data1Name);
+				console.log('data.data1 : ' + data.data1);
+				console.log('data.data2Name : ' + data.data2Name);
+				console.log('data.data2 : ' + data.data2);
+				
+				if(data.resultCode.startsWith('S-')) {
+					var likeButton = $('#likeButton');
+					var likeCount = $('#likeCount');
+					var likeCountC = $('.likeCount');
+					
+					var DislikeButton = $('#DislikeButton');
+					var DislikeCount = $('#DislikeCount');
+					var DislikeCountC = $('.DislikeCount');
+					
+					if (data.resultCode == 'S-1') {
+						DislikeButton.toggleClass('btn-outline');
+						DislikeCount.text(data.data2);
+						DislikeCountC.text(data.data2);
+						
+					} else if (data.resultCode == 'S-2') {						
+						likeButton.toggleClass('btn-outline');
+						likeCount.text(data.data1);
+						likeCountC.text(data.data1);
+						
+						DislikeButton.toggleClass('btn-outline');
+						DislikeCount.text(data.data2);
+						DislikeCountC.text(data.data2);
+					} else {
+						DislikeButton.toggleClass('btn-outline');
+						DislikeCount.text(data.data2);
+						DislikeCountC.text(data.data2);
+					}
+				} else {
+					alert(data.msg);
+				}
+			},
+			error: function(jdXHR, textStatus, errorThrown) {
+				alert('싫어요 오류 발생 : ' + textStatus);
+			}
+		});
+	}
+ 
+ $(function() {
+	checkRP();
+})
+
 </script>
 
 <script>
-	function ArticleDetail__doIncreaseHitCount() {
-		$.get('../article/doIncreaseHitCountRd', {
-			id : params.id,
-			ajaxMode : 'Y'
-		}, function(data) {
-			console.log(data);
-			console.log(data.data1);
-			console.log(data.msg);
-			$('.article-detail__hit-count').html(data.data1);
-		}, 'json');
-	}
+function ArticleDetail__doIncreaseHitCount() {
+	$.get('../article/doIncreaseHitCountRd', {
+		id : params.id,
+		ajaxMode : 'Y'
+	}, function(data) {
+		console.log(data);
+		console.log(data.data1);
+		console.log(data.msg);
+		$('.article-detail__hit-count').html(data.data1);
+	}, 'json');
+}
 
-	$(function() {
-		ArticleDetail__doIncreaseHitCount();
-		/* setTimeout( ArticleDetail__doIncreaseHitCount(), 2000); */
-	})
+$(function() {
+	ArticleDetail__doIncreaseHitCount();
+	/* setTimeout( ArticleDetail__doIncreaseHitCount(), 2000); */
+})
+
+
+}
 </script>
 
 <section class="mt-24 text-xl px-4">
@@ -54,12 +185,18 @@
 					</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">좋아요</th>
-					<td style="text-align: center;">${article.extra__goodPoint }</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">싫어요</th>
-					<td style="text-align: center;">${article.extra__badPoint }</td>
+					<th style="text-align: center;">좋아요 / 싫어요 / ${usersReaction }</th>
+					<td style="text-align: center;">
+						<button id="likeButton" class="btn btn-outline btn-info" onclick="doGoodReaction(${param.id})">
+							좋아요
+							<span class="likeCount">${article.goodReactionPoint }</span>
+						</button>
+
+						<button id="DislikeButton" class="btn btn-outline btn-secondary" onclick="doBadReaction(${param.id})">
+							싫어요
+							<span class="DislikeCount">${article.badReactionPoint }</span>
+						</button>
+					</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">작성자</th>
@@ -79,11 +216,6 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="mt-4" style="text-align: center;">
-
-			<button class="btn">좋아요</button>
-			<button class="btn">싫어요</button>
-
 
 
 		<div class="btns">

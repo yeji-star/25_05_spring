@@ -17,6 +17,7 @@ import com.example.demo.DemoApplication;
 import com.example.demo.Interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
@@ -43,6 +44,9 @@ public class UserArticleController {
 
 	@Autowired
 	private BoardService boardService;
+
+	@Autowired
+	private ReactionPointService reactionPointService;
 
 	UserArticleController(BeforeActionInterceptor beforeActionInterceptor) {
 		this.beforeActionInterceptor = beforeActionInterceptor;
@@ -85,20 +89,34 @@ public class UserArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
+		// -1 싫어요, 0 표현X, 1 좋아요
+		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
+
+		if (usersReactionRd.isSuccess()) {
+			model.addAttribute("userCanMakeReaction", usersReactionRd.isSuccess());
+
+		}
+
 		model.addAttribute("article", article);
+model.addAttribute("usersReaction", usersReactionRd.getData1());
+		model.addAttribute("isAlreadyAddGoodRp",
+				reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
+		model.addAttribute("isAlreadyAddBadRp",
+				reactionPointService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
+	
 
 		return "user/article/detail";
 	}
-	
+
 	// 상세 페이지 - 조회수 기능 있음
 
 	@RequestMapping("/user/article/doIncreaseHitCountRd")
 	@ResponseBody // 추가해서 jsp로 보내는 목적이 아님
 	public ResultData doIncreaseHitCount(int id) {
-		
+
 		ResultData increaseHitCountRd = articleService.increaseHitCount(id);
-		
-		if(increaseHitCountRd.isfail()) {
+
+		if (increaseHitCountRd.isfail()) {
 			return increaseHitCountRd;
 		}
 
@@ -109,7 +127,8 @@ public class UserArticleController {
 
 	@RequestMapping("/user/article/list")
 	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "title") String SearchKeywordTypeCode,
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "title") String SearchKeywordTypeCode,
 			@RequestParam(defaultValue = "") String searchKeyword) throws IOException {
 
 		Rq rq = (Rq) req.getAttribute("rq");
@@ -128,7 +147,6 @@ public class UserArticleController {
 		int itemsInAPage = 10;
 
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
-	
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, SearchKeywordTypeCode,
 				searchKeyword);
