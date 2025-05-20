@@ -53,8 +53,10 @@ public class WebMvcConfigurer implements org.springframework.web.servlet.config.
 		ir.addPathPatterns("/user/article/doDelete");
 		ir.addPathPatterns("/user/member/doLogout");
 		
-		ir.addPathPatterns("user/article/user/reactionPoint/doGoodReaction");
-		ir.addPathPatterns("user/article/user/reactionPoint/doBadReaction");
+		
+		ir.addPathPatterns("user/reactionPoint/doGoodReaction");
+		ir.addPathPatterns("user/reactionPoint/doBadReaction");
+		ir.addPathPatterns("user/comment");
 		
 		ir = registry.addInterceptor(needLogoutInterceptor);
 		ir.addPathPatterns("/user/member/login");

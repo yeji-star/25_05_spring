@@ -34,6 +34,8 @@ public class Article {
 	
 	private boolean userCanModify;
 	private boolean userCanDelete;
+	
+	
 
 //	public Article(int id, String title, String body) {
 //		this.id = id;

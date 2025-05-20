@@ -37,11 +37,56 @@ CREATE TABLE board (
 	delDate DATETIME COMMENT '삭제 날짜'
 );
 
+# 좋아요 테이블 생성
+CREATE TABLE reactionPoint (
+	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+	memberId INT(10) UNSIGNED NOT NULL,
+	relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
+	relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
+	`point` INT(10) NOT NULL
+);
+
+# 댓글 테이블 생성
+CREATE TABLE `comment` (
+	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	regDate DATETIME NOT NULL,
+	updateDate DATETIME NOT NULL,
+	memberId CHAR(100) NOT NULL,
+	boardId INT(10) NOT NULL,
+	`text` CHAR(100) NOT NULL,
+	delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)'	
+);
+
+# 댓글 테스트 데이터 생성
+
+INSERT INTO `comment` 
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+boardId = 3,
+`text` = 'hi';
+
+INSERT INTO `comment`
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+boardId = 3,
+`text` = 'hello';
+
+INSERT INTO `comment`
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+boardId = 6,
+`text` = 'why';
+
 # 게시판 테스트 데이터 생성
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-`code` = 'notice',
+`code` = 'NOTICE',
 `name` = '공지사항';
 
 INSERT INTO board
@@ -145,18 +190,6 @@ ALTER TABLE article ADD COLUMN boardId INT(10) UNSIGNED NOT NULL AFTER `memberId
 # 조회수 추가
 ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER updateDate;
 
-# reactionPoint 테이블 생성
-
-CREATE TABLE reactionPoint (
-	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	regDate DATETIME NOT NULL,
-	updateDate DATETIME NOT NULL,
-	memberId INT(10) UNSIGNED NOT NULL,
-	relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
-	relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
-	`point` INT(10) NOT NULL
-);
-
 # reactionPoint 테스트 데이터 생성
 # 1번 회원이 1번 글에 싫어요
 INSERT INTO reactionPoint
@@ -203,6 +236,8 @@ relTypeCode = 'article',
 relId = 1,
 `point` = 1;
 
+# boardId 업데이트
+
 UPDATE article 
 SET boardId = 1
 WHERE id IN (1, 2);
@@ -219,6 +254,8 @@ UPDATE article
 SET boardId = 3
 WHERE id = 6;
 
+# 검색
+
 SELECT *
 FROM article
 ORDER BY id DESC;
@@ -233,16 +270,22 @@ FROM board;
 SELECT *
 FROM reactionPoint;
 
+SELECT *
+FROM `comment`;
+
 # article 테이블에 reactionPoint(좋아요) 컬럼 추가
 ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+
+# article 테이블에 댓글 컬럼 추가
+ALTER TABLE article ADD COLUMN `comment` CHAR(100) NOT NULL;
 
 # update join -> 기존 게시글의 good bad RP 값을 RP 테이블에서 추출해서 article 테이블에 채우기
 UPDATE article AS A
 INNER JOIN (
 	SELECT RP.relTypeCode, RP.relId,
 	IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0) AS goodReactionPoint,
-	IFNULL(SUM(IF(RP.point < 0, RP.point, 0)),0) AS badReactionPoint
+	IFNULL(SUM(IF(RP.point < 0, RP.point * -1, 0)),0) AS badReactionPoint
 	FROM reactionPoint AS RP
 	GROUP BY RP.relTypeCode, RP.relId
 ) AS RP_SUM
@@ -252,15 +295,24 @@ A.badReactionPoint = RP_SUM.badReactionPoint;
 
 
 
+
+
 ######################################################################
+
+# 1번 회원이 어느 글에 좋아요를 했는지
+SELECT IFNULL(SUM(RP.point),0)
+ FROM reactionPoint AS RP
+WHERE RP.relTypeCode = 'article'
+AND RP.relId = 1
+AND RP.memberId = 1;
 
 SELECT hitCount
 FROM article
 WHERE id = 1;
 
-SELECT count(*)
+SELECT COUNT(*)
 FROM article
-where boardId = 1
+WHERE boardId = 1
 ORDER BY id DESC;
 
 SELECT A.*, M.nickname AS extra__writer
@@ -276,8 +328,8 @@ INNER JOIN `member` AS M
 ON A.memberId = M.id
 LEFT JOIN reactionPoint AS rp
 ON a.id = rp.relId AND rp.relTypeCode = 'article'
-group by a.id
-order by a.id desc;
+GROUP BY a.id
+ORDER BY a.id DESC;
 
 SELECT A.*, M.nickname AS extra__writer, rp.point
 FROM article AS A

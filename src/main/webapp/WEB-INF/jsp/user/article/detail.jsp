@@ -139,6 +139,17 @@
 
 <script>
 function ArticleDetail__doIncreaseHitCount() {
+	
+	/* 브라우저에서 관리하는 저장소 */
+	
+	const localStorageKey = 'article__' + param.id + '__alreadyOnView';
+	
+	if(localStorage.getItem(localStorageKey)) {
+		return;
+	}
+	
+	localStorage.setItem(localStorageKey, true);
+	
 	$.get('../article/doIncreaseHitCountRd', {
 		id : params.id,
 		ajaxMode : 'Y'
@@ -156,13 +167,23 @@ $(function() {
 })
 
 
-}
+
 </script>
+
 
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
 
+		<div class="btns">
+			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
+			<c:if test="${article.userCanDelete }">
+				<a class="btn btn-ghost float-right" href="../article/doDelete?id=${article.id}">삭제</a>
+			</c:if>
+			<c:if test="${article.userCanModify }">
+				<a class="btn btn-ghost float-right" href="../article/modify?id=${article.id}">수정</a>
+			</c:if>
 
+		</div>
 
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<tbody>
@@ -217,18 +238,25 @@ $(function() {
 			</tbody>
 		</table>
 
+		<div>
 
-		<div class="btns">
-			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
-
-			<c:if test="${article.userCanDelete }">
-				<a class="btn btn-ghost float-right" href="../article/doDelete?id=${article.id}">삭제</a>
-			</c:if>
-			<c:if test="${article.userCanModify }">
-				<a class="btn btn-ghost float-right" href="../article/modify?id=${article.id}">수정</a>
-			</c:if>
-
+			<div class="comment btns mt-20 mb-20">
+				<form action="../writeComment" method="post">
+					<fieldset>
+						<legend class="fieldset-legend">댓글</legend>
+						<textarea style="text-align: center;" type="text" placeholder="댓글 입력" name="text"></textarea>
+						<c:if test="${article.userCanDelete }">
+							<a class="btn btn-ghost float-right" href="../article/doDelete?id=${article.id}">삭제</a>
+						</c:if>
+						<c:if test="${article.userCanModify }">
+							<a class="btn btn-ghost float-right" href="../article/modify?id=${article.id}">수정</a>
+						</c:if>
+						<button type="submit">등록</button>
+					</fieldset>
+				</form>
+			</div>
 		</div>
+
 
 	</div>
 </section>

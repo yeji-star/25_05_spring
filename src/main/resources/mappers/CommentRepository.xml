@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.repository.BoardRepository">
+
+
+	<insert id="writeComment"
+		parameterType="com.example.demo.vo.Comment">
+		INSERT INTO `comment`
+		SET regDate = NOW(),
+		updateDate =
+		NOW(),
+		memberId = #{loginedMemberId},
+		boardId = #{boardId},
+		`text` = #{text};
+	</insert>
+
+	<update id="modifyComment"
+		parameterType="com.example.demo.vo.Comment">
+		UPDATE `comment`
+		<set>
+			<if test="text != null and text != ''">`text` = #{text}</if>
+			updateDate = NOW()
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteComment"
+		parameterType="com.example.demo.vo.Comment">
+		UPDATE `comment`
+		SET comment_status=0
+		WHERE id = #{id}
+	</update>
+
+</mapper>

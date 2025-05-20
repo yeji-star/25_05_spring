@@ -29,7 +29,7 @@ public class UserReactionPointController {
 	@Autowired
 	private ArticleService articleService;
 
-	@RequestMapping("user/article/user/reactionPoint/doGoodReaction")
+	@RequestMapping("user/reactionPoint/doGoodReaction")
 	@ResponseBody
 	public ResultData doGoodReaction(String relTypeCode, int relId, String replaceUri) {
 
@@ -65,7 +65,7 @@ public class UserReactionPointController {
 		return ResultData.from("S-1", "좋아요 취소", "goodRP", goodRP, "badRP", badRP);
 	}
 
-	@RequestMapping("user/article/user/reactionPoint/doBadReaction")
+	@RequestMapping("user/reactionPoint/doBadReaction")
 	@ResponseBody
 	public ResultData doBadReaction(String relTypeCode, int relId, String replaceUri) {
 

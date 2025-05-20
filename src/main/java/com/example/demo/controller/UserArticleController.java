@@ -17,6 +17,7 @@ import com.example.demo.DemoApplication;
 import com.example.demo.Interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.CommentService;
 import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
@@ -47,6 +48,9 @@ public class UserArticleController {
 
 	@Autowired
 	private ReactionPointService reactionPointService;
+
+	@Autowired
+	private CommentService commentService;
 
 	UserArticleController(BeforeActionInterceptor beforeActionInterceptor) {
 		this.beforeActionInterceptor = beforeActionInterceptor;
@@ -98,17 +102,14 @@ public class UserArticleController {
 		}
 
 		model.addAttribute("article", article);
-model.addAttribute("usersReaction", usersReactionRd.getData1());
+		model.addAttribute("usersReaction", usersReactionRd.getData1());
 		model.addAttribute("isAlreadyAddGoodRp",
 				reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
 		model.addAttribute("isAlreadyAddBadRp",
 				reactionPointService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
-	
 
 		return "user/article/detail";
 	}
-
-	// 상세 페이지 - 조회수 기능 있음
 
 	@RequestMapping("/user/article/doIncreaseHitCountRd")
 	@ResponseBody // 추가해서 jsp로 보내는 목적이 아님
@@ -120,7 +121,8 @@ model.addAttribute("usersReaction", usersReactionRd.getData1());
 			return increaseHitCountRd;
 		}
 
-		return ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
+		return ResultData.from(increaseHitCountRd.getResultCode(), increaseHitCountRd.getMsg(), "hitCount", articleService.getArticleHitCount(id), "articleId",
+				id);
 	}
 
 	// 글 리스트
