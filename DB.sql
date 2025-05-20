@@ -48,7 +48,7 @@ CREATE TABLE reactionPoint (
 	`point` INT(10) NOT NULL
 );
 
-# 좋아요 테이블 생성
+# 댓글 테이블 생성
 CREATE TABLE reply (
 	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,

@@ -6,19 +6,19 @@
 <mapper namespace="com.example.demo.repository.BoardRepository">
 
 
-	<insert id="writeComment"
-		parameterType="com.example.demo.vo.Comment">
-		INSERT INTO `comment`
+	<insert id="writeReply"
+		parameterType="com.example.demo.vo.Reply">
+		INSERT INTO reply
 		SET regDate = NOW(),
-		updateDate =
-		NOW(),
-		memberId = #{loginedMemberId},
-		boardId = #{boardId},
-		`text` = #{text};
+		updateDate = NOW(),
+		memberId = #{memberId},
+		relTypeCode = #{relTypeCode},
+		relId = #{relId},
+		`body` = #{body};
 	</insert>
 
 	<update id="modifyComment"
-		parameterType="com.example.demo.vo.Comment">
+		parameterType="com.example.demo.vo.Reply">
 		UPDATE `comment`
 		<set>
 			<if test="text != null and text != ''">`text` = #{text}</if>
@@ -28,7 +28,7 @@
 	</update>
 
 	<update id="deleteComment"
-		parameterType="com.example.demo.vo.Comment">
+		parameterType="com.example.demo.vo.Reply">
 		UPDATE `comment`
 		SET comment_status=0
 		WHERE id = #{id}

@@ -40,10 +40,9 @@ public class UserReplyController {
 
 	@RequestMapping("user/writeReply")
 	@ResponseBody
-	public String writeComment(HttpServletRequest req, String relTypeCode, String body, int relId) {
+	public String writeReply(HttpServletRequest req, String relTypeCode, String body, int relId) {
 		
 		Rq rq = (Rq) req.getAttribute("rq");
-
 
 		if (Ut.isEmptyOrNull(body)) {
 			return Ut.jsHistoryBack("F-1", "내용을 입력하세요.");

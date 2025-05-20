@@ -257,6 +257,7 @@ $(function() {
 			</div>
 
 		</div>
+		
 		<tr>
 			<th style="text-align: center;">조회수</th>
 			<td style="text-align: center;">
