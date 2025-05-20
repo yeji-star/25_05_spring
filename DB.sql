@@ -225,18 +225,18 @@ relId = 1,
 INSERT INTO reactionPoint
 SET regDate = NOW(),
 updateDate = NOW(),
-memberId = 2,
+memberId = 1,
 relTypeCode = 'article',
-relId = 2,
+relId = 1,
 `point` = -1;
 
 # 3번 회원이 1번 글에 좋아요
 INSERT INTO reactionPoint
 SET regDate = NOW(),
 updateDate = NOW(),
-memberId = 3,
+memberId = 2,
 relTypeCode = 'article',
-relId = 1,
+relId = 4,
 `point` = 1;
 
 # boardId 업데이트
@@ -296,9 +296,50 @@ ON A.id = RP_SUM.relId
 SET A.goodReactionPoint = RP_SUM.goodReactionPoint,
 A.badReactionPoint = RP_SUM.badReactionPoint;
 
+# reply 테이블에 좋아요 컬럼 추가
+ALTER TABLE reply ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE reply ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
+#reply - reactionPoint 테스트 데이터
+# 1번 회원이 1번 댓글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'reply',
+relId = 1,
+`point` = -1;
 
+# 2번 회원이 1번 댓글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'reply',
+relId = 1,
+`point` = 1;
 
+# 3번 회원이 1번 댓글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'reply',
+relId = 4,
+`point` = 1;
+
+# update join -> 기존 댓글의 good bad RP 값을 RP 테이블에서 추출해서 reply 테이블에 채우기
+UPDATE reply AS R
+INNER JOIN (
+	SELECT RP.relTypeCode, RP.relId,
+	IFNULL(SUM(IF(RP.point > 0, RP.point, 0)),0) AS goodReactionPoint,
+	IFNULL(SUM(IF(RP.point < 0, RP.point * -1, 0)),0) AS badReactionPoint
+	FROM reactionPoint AS RP
+	GROUP BY RP.relTypeCode, RP.relId
+) AS RP_SUM
+ON R.id = RP_SUM.relId
+SET R.goodReactionPoint = RP_SUM.goodReactionPoint,
+R.badReactionPoint = RP_SUM.badReactionPoint;
 
 
 ######################################################################

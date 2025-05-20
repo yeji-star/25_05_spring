@@ -255,8 +255,14 @@ $(function() {
 					</fieldset>
 				</form>
 			</div>
-		</div>
 
+		</div>
+		<tr>
+			<th style="text-align: center;">조회수</th>
+			<td style="text-align: center;">
+				<span class="article-detail__hit-count"> ${article.hitCount } </span>
+			</td>
+		</tr>
 
 	</div>
 </section>

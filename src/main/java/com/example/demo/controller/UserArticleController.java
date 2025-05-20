@@ -17,7 +17,7 @@ import com.example.demo.DemoApplication;
 import com.example.demo.Interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
-import com.example.demo.service.CommentService;
+import com.example.demo.service.replyService;
 import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
@@ -50,7 +50,7 @@ public class UserArticleController {
 	private ReactionPointService reactionPointService;
 
 	@Autowired
-	private CommentService commentService;
+	private replyService commentService;
 
 	UserArticleController(BeforeActionInterceptor beforeActionInterceptor) {
 		this.beforeActionInterceptor = beforeActionInterceptor;

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Comment {
+public class Reply {
 
 	private int id;
 	private LocalDateTime regDate;
