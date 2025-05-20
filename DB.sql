@@ -48,39 +48,42 @@ CREATE TABLE reactionPoint (
 	`point` INT(10) NOT NULL
 );
 
-# 댓글 테이블 생성
-CREATE TABLE `comment` (
+# 좋아요 테이블 생성
+CREATE TABLE reply (
 	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	regDate DATETIME NOT NULL,
 	updateDate DATETIME NOT NULL,
-	memberId CHAR(100) NOT NULL,
-	boardId INT(10) NOT NULL,
-	`text` CHAR(100) NOT NULL,
-	delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)'	
+	memberId INT(10) UNSIGNED NOT NULL,
+	relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
+	relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
+	`body` INT(10) NOT NULL
 );
 
 # 댓글 테스트 데이터 생성
 
-INSERT INTO `comment` 
-SET regDate = NOW(),
-updateDate = NOW(),
-memberId = 1,
-boardId = 3,
-`text` = 'hi';
-
-INSERT INTO `comment`
+INSERT INTO reply 
 SET regDate = NOW(),
 updateDate = NOW(),
 memberId = 2,
-boardId = 3,
-`text` = 'hello';
+relTypeCode = 'article',
+relId = 1,
+`body` = 'hi';
 
-INSERT INTO `comment`
+INSERT INTO reply 
 SET regDate = NOW(),
 updateDate = NOW(),
 memberId = 1,
-boardId = 6,
-`text` = 'why';
+relTypeCode = 'article',
+relId = 1,
+`body` = 'hello';
+
+INSERT INTO reply 
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 4,
+`body` = 'why';
 
 # 게시판 테스트 데이터 생성
 INSERT INTO board
@@ -271,14 +274,14 @@ SELECT *
 FROM reactionPoint;
 
 SELECT *
-FROM `comment`;
+FROM reply;
 
 # article 테이블에 reactionPoint(좋아요) 컬럼 추가
 ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
 # article 테이블에 댓글 컬럼 추가
-ALTER TABLE article ADD COLUMN `comment` CHAR(100) NOT NULL;
+ALTER TABLE article ADD COLUMN reply CHAR(100) NOT NULL;
 
 # update join -> 기존 게시글의 good bad RP 값을 RP 테이블에서 추출해서 article 테이블에 채우기
 UPDATE article AS A
@@ -292,6 +295,7 @@ INNER JOIN (
 ON A.id = RP_SUM.relId
 SET A.goodReactionPoint = RP_SUM.goodReactionPoint,
 A.badReactionPoint = RP_SUM.badReactionPoint;
+
 
 
 
