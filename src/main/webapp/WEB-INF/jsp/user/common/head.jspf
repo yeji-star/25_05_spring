@@ -62,6 +62,9 @@
 				<!-- 						</li> -->
 				<!-- 					</ul> -->
 				<!-- 				</li> -->
+				<li>
+						<a class="hover:underline" href="../faq/faq">FAQ</a>
+					</li>
 				<c:if test="${!rq.isLogined() }">
 					<li>
 						<a class="hover:underline" href="../member/login">LOGIN</a>
