@@ -1,0 +1,44 @@
+server:
+  port: 8080
+spring:
+<<<<<<< HEAD
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: axdswww12@gmail.com
+    #password: 구글 계정 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+=======
+>>>>>>> 6b94bad872319c3c208baea6753132270d9b8734
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+<<<<<<< HEAD
+    url: jdbc:mysql://127.0.0.1:3306/25_05_Spring?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+=======
+    url: jdbc:mysql://127.0.0.1:3306/25_05_spring?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+>>>>>>> 6b94bad872319c3c208baea6753132270d9b8734
+    username: root
+    password: 
+mybatis:
+  type-aliases-package: com.example.demo.vo
+<<<<<<< HEAD
+  mapper-locations: classpath:/mappers/**/*.xml
+
+custom:
+  siteName: 25_05_Spring
+  siteMainUri: http://localhost:8080
+  emailFrom: no-reply@localhost
+  emailFromName: 25_05_Spring
+
+=======
+  mapper-locations: classpath:/mappers/**/*.xml
+>>>>>>> 6b94bad872319c3c208baea6753132270d9b8734
